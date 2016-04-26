@@ -1,0 +1,49 @@
+<html>
+<head>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<title> Cs465 Final Project</title>
+
+<style>
+h1{
+	text-align: center; 
+}
+</style>
+</head>
+
+<body>
+	<h1> Visualizing Health Insurance</h1>
+
+	<script type="text/javascript">
+
+	 function objToFilteredArray(d, unwanted){
+	    // convert object to array of associative pairs
+	    // {'A':50, 'B':12} -> \[{'key':'A', 'value':50}, {'key':'B', 'value':12}\]
+	    ar = d3.entries(d);
+	    
+	    // remove the pairs corresponding to the categorical values
+	    // we do this by filtering and removing pairs that have a key in the unwanted list
+	    return ar.filter(function(v){return unwanted.indexOf(v.key) == -1;}); 
+	  }
+
+	d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/films50.json", function(dataset){
+
+	var table = d3.select("body").append("table");
+
+	  var tr = table.selectAll("tr")
+	    .data(dataset)
+	    .enter().append("tr");
+
+	  var td = tr.selectAll("td")
+	      .data(function(d) {return objToFilteredArray(d, ['studio','genre','film']) })
+	      .enter().append("td")
+	      .text(function(d) { console.log(d); return d.key + ": " + d.value; }); 
+
+	});
+
+	</script>
+	
+</body>
+
+
+
+</html>
