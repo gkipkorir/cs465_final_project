@@ -18,12 +18,18 @@ import json
 # print response.json 
 # #print the_page
 
-myData = json.load(urllib2.urlopen("http://api.census.gov/data/timeseries/healthins/sahie?get=NIC_PT,NAME,NUI_PT&for=county:*&time=2013"))
 
-year = 2013 
-output_name = "county_data_" + str(year) + ".txt"
+startYear = 2006
+endYear = 2013
+myData = []
 
-print output_name
+for year in range(startYear, endYear+1):
+	url = "http://api.census.gov/data/timeseries/healthins/sahie?get=NIC_PT,NAME,NUI_PT&for=STATE:025&time=" + str(year)
+	yearData = json.load(urllib2.urlopen(url))
+	myData.append({year: yearData})
+
+
+output_name = "yearly_data.txt"
 
 with open(output_name, 'w') as outfile:
     json.dump(myData, outfile)

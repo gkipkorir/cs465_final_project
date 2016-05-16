@@ -1,0 +1,205 @@
+
+<!DOCTYPE html >
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>
+			Using GeoJSON
+		</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+
+		<style type="text/css">
+
+		div.tooltip {	
+		    position: absolute;			
+		    text-align: center;			
+		    width: 80px;					
+		    height: 40px;					
+		    padding: 2px;				
+		    font: 12px sans-serif;		
+		    background: lightsteelblue;	
+		    border: 0px;		
+		    border-radius: 8px;			
+		    pointer-events: none;			
+		}
+
+		</style>
+	</head>
+	<body>
+		<h1> Exploring ObamaCare </h1>
+
+		<script type="text/javascript">
+
+		// create an SVG region in the usual way
+		var width = 800, height = 500;
+
+		var svg = d3.select("body")
+				.append("svg")
+				.attr({"width":width, "height":height});
+
+		var drawData, mapData, currentYear; 
+
+		// create a projection that provides our mapping from lat,lon data to x,y, coordiantes
+		var projection = d3.geo.albersUsa()
+				.translate([width/2, height/2]);
+
+		// create a path tool that will translate GeoJSON into SVG path data
+		var path = d3.geo.path().projection(projection);
+
+		// create our coloring tool
+		var color = d3.scale.quantize()
+		.range(colorbrewer.YlGnBu[8]);
+
+		// Define the div for the tooltip
+		var div = d3.select("body").append("div")	
+		    .attr("class", "tooltip")				
+		    .style("opacity", 0);
+
+		// the metric we are showing -- obviously, it would not take much to make this as interactive as the
+		// first example
+
+		// set the year and redraw map. 
+
+
+		var metric="perOver65";
+
+
+
+		//set the new Year and redraw the Vis 
+		function setYear(year){
+			console.log("setYear got called!");
+			currentYear = year;
+			drawVis(); 
+		}
+
+		if (currentYear === undefined){
+			currentYear = "2006"; 
+		}
+
+		//draw the Visualization 
+
+		function drawVis(){
+
+
+				var censusData = drawData[currentYear]["states"];
+
+				var censusMap = d3.map();
+				censusData.forEach(function(d){censusMap.set(d.NAME,d)});
+
+				// loop through all of the path data, attaching the appropriate
+				// record to each one based on the name
+				for (var i = 0; i < mapData.features.length; i++){
+					var name = mapData.features[i].properties.name;
+					mapData.features[i].properties.value = censusMap.get(name);
+				}
+
+				// create the states in the SVG
+				var states = svg.selectAll("path")
+				.data(mapData.features); 
+
+				states.exit()
+					.transition()
+					.duration(10)
+					.remove(); 
+				
+				states.enter()
+					.append("path")
+					.attr("d", path)
+					.attr("class","state");
+
+				// style each state to set the fill color based on our metric
+				states
+					.style("fill", function(d){
+					if (d.properties.value){
+						return color(+d.properties.value["PUI"]);
+					}	else{
+						return "red";
+					}
+
+				})
+			  .on("mouseover", function(d) {		
+	            div.transition()		
+	                .duration(200)		
+	                .style("opacity", .9);		
+	            div	.html(currentYear + "<br/>"  + d.properties.value["NAME"] + "<br/>"  + d.properties.value["PUI"].substring(0,4) +" %" )	//d.properties.value["PUI"].substring(0,4)
+	                .style("left", (d3.event.pageX) + "px")		
+	                .style("top", (d3.event.pageY - 28) + "px");	
+	            })					
+		        .on("mouseout", function(d) {		
+		            div.transition()		
+		                .duration(500)		
+		                .style("opacity", 0);	
+		        }); 
+
+
+		}
+
+
+		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
+		// are not displaying anything until the binding is done)
+		d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/us-states.json", function(inputMapData){
+			d3.json("all_Data.json", function (dataset) {
+						//set the color domain 
+				colorObject = d3.values(dataset); 
+
+				var max = d3.max(colorObject, function(yearData) {
+		 			 return d3.max(yearData["states"], function(d){ 
+		 			 	return +d["PUI"]; 
+		 			 });
+				});
+
+				var min = d3.min(colorObject, function(yearData) {
+		 			 return d3.min(yearData["states"], function(d){ 
+		 			 	return +d["PUI"]; 
+		 			 });
+				});
+
+				color.domain([min, max]);
+
+
+				drawData = dataset;
+				mapData = inputMapData; 
+
+
+
+				// build the popup menu
+
+				var years = Object.keys(drawData); 
+				console.log(years);
+				var menu = d3.select("#metrics");
+				
+				years.forEach(function(d){
+				 	console.log(d);
+					menu.append("option").attr("value",d).text(d);
+				}); 
+
+				drawVis(); 
+
+				// set the behavior on a change to the menu (i.e., update the coloring)
+				d3.select("select").on("change", function () {
+					console.log("change happened!");
+					setYear(this.value);
+					});
+
+				// create a map of our census data, so we can easily find records
+				// correspondng to a particular state
+
+
+	});
+});
+
+
+
+
+		</script>
+
+		<select><optgroup label="Metrics" id="metrics"></optgroup></select>
+
+<div>
+	<p>In this example, we are getting to the same result in a different way. This time we are loading a description of the map in GeoJSON format rather than making use of a pre-generated SVG file. In addition, we are bundling the demographic data directly in with the path data, so we can color the paths in the style to which we have become accustomed. </p>
+</div>
+
+
+	</body>
+</html>
