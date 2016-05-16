@@ -1,0 +1,43 @@
+{"2006": 
+
+	[
+
+		["IPR_DESC", "IPRCAT", "PCTIC_PT", "NAME", "time", "state"], 
+
+		["All Incomes", "0", "95.7", "Massachusetts", "2013", "25"], 
+
+		["<= 200% of Poverty", "1", "91.6", "Massachusetts", "2013", "25"], 
+
+		["<= 250% of Poverty", "2", "91.8", "Massachusetts", "2013", "25"],
+
+		["<= 138% of Poverty", "3", "91.9", "Massachusetts", "2013", "25"], 
+
+		["<= 400% of Poverty", "4", "93.0", "Massachusetts", "2013", "25"], 
+
+		["138% to 400% of Poverty", "5", "93.7", "Massachusetts", "2013", "25"]
+
+	]
+
+}
+
+
+[
+
+{"2006": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5009119", "Massachusetts", "530973", "2006", "25"]]}, 
+
+{"2007": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5163141", "Massachusetts", "435894", "2007", "25"]]},
+
+{"2008": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5216110", "Massachusetts", "240442", "2008", "25"]]}, 
+
+{"2009": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5254315", "Massachusetts", "269241", "2009", "25"]]}, 
+
+{"2010": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5184159", "Massachusetts", "281724", "2010", "25"]]}, 
+
+{"2011": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5214022", "Massachusetts", "267661", "2011", "25"]]}, 
+
+{"2012": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5249851", "Massachusetts", "246614", "2012", "25"]]}, 
+
+{"2013": [["NIC_PT", "NAME", "NUI_PT", "time", "state"], ["5272042", "Massachusetts", "238884", "2013", "25"]]}
+
+]
+

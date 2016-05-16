@@ -1,0 +1,48 @@
+// { "data":
+// 	{"id": "AL",
+// 		"name": "Alaska",
+// 		"years": 
+// 			[
+// 				{"year": 2006, "IPR_DESC": "IPR_DESC", "PCTIC_PT": "PCTIC_PT"},
+// 			]
+// 	}
+// }
+
+
+data = [
+	{
+		"year": 2006,
+		"states": 
+			[
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"}
+			]
+	},
+	{
+		"year": 2007,
+		"states": 
+			[
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"},
+				{"state_id": "AL", "state_name": "name", "NUI_PT": "NUI_PT"}
+			]
+	},
+
+]
