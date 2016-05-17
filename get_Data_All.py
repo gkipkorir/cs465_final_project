@@ -80,14 +80,12 @@ for year in range(startYear, endYear+1):
 		state_info = {}
 		for j in range(len(yearData[0])):
 			state_info[yearData[0][j]] = yearData[i][j]
-
+            # state_info.append([])
 		
 		#Add state abbreviation 
 		state_abrev = us_state_abbrev[state_info["NAME"]] 
 		state_info["abrev"] = state_abrev
 		#print state_abrev
-
-
 
 		#add perent unInusred 
 		numInsured = int(state_info["NIC_PT"])
