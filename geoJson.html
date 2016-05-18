@@ -62,7 +62,6 @@
 		// set the year and redraw map. 
 
 
-		var metric="perOver65";
 
 
 
@@ -214,18 +213,36 @@
 		}
 
 
+		var getdata=function ( dataobj, year){
+			console.log("this function has been called");
+			 var yeardata=[];
+		for (prop in dataobj){
+			//console.log(prop);
+			if (prop==year){
+				//console.log(year)
+				yeardata.push(dataobj[prop]);
+				//console.log(ydata[0]);
+			}
+		}
+			
+			return yeardata;
+		};
+
+
 
 
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
 		// are not displaying anything until the binding is done)
-		d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/us-states.json", function(inputMapData){
+		d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/us-states.json", 
+			function(inputMapData){
 			d3.json("race_new_Data.json", function(race_Data){
+				//console.log(race_Data);
 				raceData = race_Data; 
 			
 				d3.json("all_Data.json", function (dataset) {
 
-
+					console.log(getdata(dataset, "2009"));
 					allData = dataset;
 					mapData = inputMapData; 
 
