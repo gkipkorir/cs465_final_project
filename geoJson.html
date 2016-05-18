@@ -36,11 +36,40 @@
 	</head>
 	<body>
 		<h1> Exploring ObamaCare </h1>
+		 <div id="addPane">
+
+<body>
+
+<select>
+  
+  <optgroup label="Race">
+     <option value="mercedes">All Races</option>
+    <option value="mercedes">Black</option>
+    <option value="audi">White</option>
+     <option value="mercedes">Latino</option>
+  </optgroup>
+</select>
+      <select>
+  
+  <optgroup label="Race">
+     <option value="mercedes">All Income</option>
+    <option value="mercedes">1</option>
+    <option value="audi">2</option>
+     <option value="mercedes">3</option>
+     <option value="audi">4</option>
+     <option value="mercedes">5</option>
+  </optgroup>
+</select>
+     
+     
+
+  </div>
 
 		<script type="text/javascript">
 
 		// create an SVG region in the usual way
 		var width = 800, height = 500;
+
 
 		var svg = d3.select("body")
 				.append("svg")
@@ -257,14 +286,15 @@
 				console.log(race_Data);
 			
 				d3.json("all_Data.json", function (dataset) {
-
+					console.log("all");
+					console.log(dataset);
 					//console.log(getyeardata(dataset, "2009"));
 					allData = dataset;
 					mapData = inputMapData; 
 
 
 					var years = Object.keys(dataset); 
-					console.log(years);
+					//console.log(years);
 
 					//d3.selectAll('#metrics').remove();
 
@@ -279,7 +309,7 @@
 
 					// set the behavior on a change to the menu (i.e., update the coloring)
 					d3.select("select").on("change", function () {
-						console.log("change happened!");
+						//console.log("change happened!");
 						setYear(this.value);
 						});
 
@@ -297,7 +327,7 @@
 		<select><optgroup label="Metrics" id="metrics"></optgroup></select>
 
 <div>
-	<p>In this example, we are getting to the same result in a different way. This time we are loading a description of the map in GeoJSON format rather than making use of a pre-generated SVG file. In addition, we are bundling the demographic data directly in with the path data, so we can color the paths in the style to which we have become accustomed. </p>
+
 </div>
 
 
