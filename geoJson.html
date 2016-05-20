@@ -359,6 +359,20 @@
 					//console.log(dataset[0]["2006"]);
 					var big={};
 					//
+						var info={"insured":40, "uninsured":60};
+					var incomelist={};
+					var income=[0,1,2,3,4,5];
+					income.forEach(function(pr){
+						incomelist[pr]=info;
+					})
+
+					//console.log(statesNames);
+					var racelist={};
+					var racel=[0,1,2,3]
+					racel.forEach(function(rc){
+						racelist[rc]=incomelist;
+					})
+					//console.log(racelist);
 					
 					var statesNames=[];
 					//console.log(dataset[0][2006]);
@@ -368,12 +382,16 @@
 						//console.log(array[i][0]);
 						statesNames.push(array[i][0]);
 					}
-					//console.log(statesNames);
-					var o={};
-					var racelist=[0,1,2,3];
+					var statobj={}
+					statesNames.forEach(function(state){
+						statobj[state]=racelist;
+					})
+					//console.log(statobj);
+					// for prop in incomelist{
+					// 	console.log(prop);
+					// }
 					
-
-					console.log(o);
+					//console.log(incomelist);
 					
 
 					//console.log(statesNames);
@@ -382,10 +400,10 @@
 					//console.log(years);
 
 					years.forEach(function (yr) {
-						big [yr]=statesNames;
+						big [yr]=statobj;
 					})
 
-					//console.log(big)
+					console.log(big)
 
 
 					var menu = d3.select("#metrics");
