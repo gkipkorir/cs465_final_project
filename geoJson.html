@@ -285,8 +285,15 @@
 			return statedata;
 		}
 
-		var getraceData= function(data, race){
+		var getraceData= function(datarray, race){
 			var racedata=[]
+			datarray.forEach(function(data){
+				//console.log(data[1]);
+				if (data[1]==race) {
+					racedata.push(data);
+				}
+			})
+			return racedata;
 		}
 
 
@@ -307,7 +314,8 @@
 					var raceobject={0:details,1:details,2:details,3:details,4:details,5:details};
 					var raceArray={all:raceobject,Blacks:raceobject,white:raceobject,Hispanic:raceobject}
 				var extracted=getyeardata(dataset,2006);
-				var al=getstatedata(extracted,"Alabama");
+				var l=getstatedata(extracted,"Alabama");
+				var al=getraceData(l, "All Races");
 				console.log(al);
 					generalobject["race"]=raceArray;
 					console.log("testing");
