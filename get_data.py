@@ -22,7 +22,7 @@ import json
 startYear = 2006
 endYear = 2013
 myData = []
-
+#http://api.census.gov/data/timeseries/healthins/sahie?get=NAME,RACE_DESC,RACECAT,IPR_DESC,IPRCAT,PCTUI_PT&for=state:*&time=2010
 for year in range(startYear, endYear+1):
 	url = "http://api.census.gov/data/timeseries/healthins/sahie?get=NIC_PT,NAME,NUI_PT&for=STATE:025&time=" + str(year)
 	yearData = json.load(urllib2.urlopen(url))

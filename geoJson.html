@@ -289,7 +289,7 @@
 			var racedata=[]
 			datarray.forEach(function(data){
 				//console.log(data[1]);
-				if (data[1]==race) {
+				if (data[2]==race) {
 					racedata.push(data);
 				}
 			})
@@ -299,7 +299,7 @@
 		var getincomedata=function(datarray, income){
 			  var value;
 			 datarray.forEach(function(data){
-			 	console.log(data[4]);
+			 	//console.log(data[4]);
 			 	if (+data[4]==income) {
 			 		console.log("here");
 					value=data[5];
@@ -322,6 +322,15 @@
 				//console.log(race_Data);
 			
 				d3.json("income_data.txt", function (dataset) {
+					//console.log(dataset);
+					var yr=getyeardata(dataset,2013);
+					
+					var stat=getstatedata(yr,"Alabama");
+					var race= getraceData(stat,0);
+					
+					var st=getincomedata(race,3);
+					//console.log(st);
+
 					var generalobject={};
 					var details={yes:70,no:30}
 					var raceobject={0:details,1:details,2:details,3:details,4:details,5:details};
@@ -329,13 +338,14 @@
 				var extracted=getyeardata(dataset,2006);
 				var l=getstatedata(extracted,"Alabama");
 				var al=getraceData(l, "All Races");
-				console.log(al);
-				console.log(getincomedata(al,0));
+				//console.log(al);
+				//console.log(getincomedata(al,0));
 					generalobject["race"]=raceArray;
-					console.log("testing");
+
+					//console.log("testing");
 					//console.log(getyeardata(dataset,2006));
 				
-
+					//console.log(generalobject);
 
 					//var incomebject={};
 
@@ -347,10 +357,36 @@
 
 					//var states=Object.keys(dataset[0][0]);
 					//console.log(dataset[0]["2006"]);
-					var years = Object.keys(dataset); 
+					var big={};
+					//
+					
+					var statesNames=[];
+					//console.log(dataset[0][2006]);
+					var array= dataset[0][2006];
+					//d3.selectAll('#metrics').remove();
+					for (var i = 1; i < 52; i++) {
+						//console.log(array[i][0]);
+						statesNames.push(array[i][0]);
+					}
+					//console.log(statesNames);
+					var o={};
+					var racelist=[0,1,2,3];
+					
+
+					console.log(o);
+					
+
+					//console.log(statesNames);
+
+		var years=["2006","2007","2008","2009","2010","2011","2012","2013"];
 					//console.log(years);
 
-					//d3.selectAll('#metrics').remove();
+					years.forEach(function (yr) {
+						big [yr]=statesNames;
+					})
+
+					//console.log(big)
+
 
 					var menu = d3.select("#metrics");
 					
