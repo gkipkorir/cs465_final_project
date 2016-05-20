@@ -256,21 +256,37 @@
 		var getyeardata=function ( dataobj, year){
 			//console.log("this function has been called");
 			 var yeardata=[];
-		for (prop in dataobj){
+			dataobj.forEach(function(element){
+				for (prop in element){
 			//console.log(prop);
 			if (prop==year){
 				//console.log(year)
-				yeardata.push(dataobj[prop]);
+				yeardata.push(element[prop]);
 				//console.log(ydata[0]);
 			}
 		}
+
+			})
+		
 			
 		return yeardata;
 		};
+		var getstatedata=function(datarray, state){
+			var statedata=[];
+			datarray.forEach(function(e){
+				e.forEach(function(element){
+					if (element[0]==state) {
+					statedata.push(element)
+				}
+				})
+				//console.log(element[0]);
+				
+			})
+			return statedata;
+		}
 
 		var getraceData= function(data, race){
 			var racedata=[]
-
 		}
 
 
@@ -290,10 +306,12 @@
 					var details={yes:70,no:30}
 					var raceobject={0:details,1:details,2:details,3:details,4:details,5:details};
 					var raceArray={all:raceobject,Blacks:raceobject,white:raceobject,Hispanic:raceobject}
-				
+				var extracted=getyeardata(dataset,2006);
+				var al=getstatedata(extracted,"Alabama");
+				console.log(al);
 					generalobject["race"]=raceArray;
-					
-					console.log(generalobject);
+					console.log("testing");
+					//console.log(getyeardata(dataset,2006));
 				
 
 
@@ -305,7 +323,8 @@
 					allData = dataset;
 					mapData = inputMapData; 
 
-
+					//var states=Object.keys(dataset[0][0]);
+					//console.log(dataset[0]["2006"]);
 					var years = Object.keys(dataset); 
 					//console.log(years);
 
