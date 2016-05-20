@@ -296,6 +296,19 @@
 			return racedata;
 		}
 
+		var getincomedata=function(datarray, income){
+			  var value;
+			 datarray.forEach(function(data){
+			 	console.log(data[4]);
+			 	if (+data[4]==income) {
+			 		console.log("here");
+					value=data[5];
+				}
+
+			 })
+			 
+		return value;
+		}
 
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
@@ -317,6 +330,7 @@
 				var l=getstatedata(extracted,"Alabama");
 				var al=getraceData(l, "All Races");
 				console.log(al);
+				console.log(getincomedata(al,0));
 					generalobject["race"]=raceArray;
 					console.log("testing");
 					//console.log(getyeardata(dataset,2006));
