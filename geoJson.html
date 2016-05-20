@@ -286,8 +286,21 @@
 				//console.log(race_Data);
 			
 				d3.json("income_data.txt", function (dataset) {
-					console.log("income");
-					console.log(dataset[0]);
+					var generalobject={};
+					var details={yes:70,no:30}
+					var raceobject={0:details,1:details,2:details,3:details,4:details,5:details};
+					var raceArray={all:raceobject,Blacks:raceobject,white:raceobject,Hispanic:raceobject}
+				
+					generalobject["race"]=raceArray;
+					
+					console.log(generalobject);
+				
+
+
+					//var incomebject={};
+
+					//console.log("income");
+					//console.log(dataset[0]);
 					//console.log(getyeardata(dataset, "2009"));
 					allData = dataset;
 					mapData = inputMapData; 
