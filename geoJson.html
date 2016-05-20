@@ -282,12 +282,12 @@
 			d3.json("race_new_Data.json", function(race_Data){
 				//console.log(race_Data);
 				raceData = race_Data; 
-				console.log("the following is the racedata");
-				console.log(race_Data);
+				//console.log("the following is the racedata");
+				//console.log(race_Data);
 			
-				d3.json("all_Data.json", function (dataset) {
-					console.log("all");
-					console.log(dataset);
+				d3.json("income_data.txt", function (dataset) {
+					console.log("income");
+					console.log(dataset[0]);
 					//console.log(getyeardata(dataset, "2009"));
 					allData = dataset;
 					mapData = inputMapData; 
