@@ -408,7 +408,8 @@
 
 					//console.log(statesNames);
 					var o={};
-					var racelist=[0,1,2,3];
+					var racelist={0:[],1:[],2:[],3:[]};
+					var myincome={0:[],1:[],2:[],3:[],4:[],5:[]};
 					
 
 					//console.log(o);
@@ -426,7 +427,7 @@
 					 var list={};
 
 					
-					var stateinfo={race:racelist,income:incomelist};
+					var stateinfo={race:racelist,income:myincome};
 					var liststate=statesNames;
 					liststate.forEach(function(mystate){
 						var st={};
@@ -438,13 +439,33 @@
 					})
 					
 
+					//console.log(list);
+					//console.log(myobj);
+
+					function parser (obj, statelist){
+						statesNames.forEach(function(state){
+								years.forEach(function(yr){
+								//console.log(yr);
+								incomelist.forEach(function(incomee){
+									//console.log(obj[yr][state]);
+									 var inc=obj[yr][state][0][incomee];
+									 //console.log([state, yr,incomee])
+									  var array=[  yr , inc]
+									   statelist[String(state)]["income"][incomee]
+						
+									  statelist[String(state)]["income"][incomee].push(array)
+								});
+
+
+							});
+						});
+
+					}
+
+
+					parser(myobj,list);
+
 					console.log(list);
-
-
-
-
-
-
 
 
 					var menu = d3.select("#metrics");
