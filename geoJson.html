@@ -311,99 +311,72 @@
 		}
 
 
+
+
+
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
 		// are not displaying anything until the binding is done)
 		d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/us-states.json", 
 			function(inputMapData){
 			d3.json("race_new_Data.json", function(race_Data){
-				//console.log(race_Data);
 				raceData = race_Data; 
-				//console.log("the following is the racedata");
-				//console.log(race_Data);
+				
 			
 				d3.json("income_data.txt", function (dataset) {
-					//console.log(dataset);
-					var yr=getyeardata(dataset,2013);
-					
-					var stat=getstatedata(yr,"Alabama");
-					var race= getraceData(stat,0);
-					
-					var st=getincomedata(race,3);
-					//console.log(st);
-
-					var generalobject={};
-					var details={yes:70,no:30}
-					var raceobject={0:details,1:details,2:details,3:details,4:details,5:details};
-					var raceArray={all:raceobject,Blacks:raceobject,white:raceobject,Hispanic:raceobject}
-				var extracted=getyeardata(dataset,2006);
-				var l=getstatedata(extracted,"Alabama");
-				var al=getraceData(l, "All Races");
-				//console.log(al);
-				//console.log(getincomedata(al,0));
-					generalobject["race"]=raceArray;
-
-					//console.log("testing");
-					//console.log(getyeardata(dataset,2006));
 				
-					//console.log(generalobject);
-
-					//var incomebject={};
-
-					//console.log("income");
-					//console.log(dataset[0]);
-					//console.log(getyeardata(dataset, "2009"));
 					allData = dataset;
 					mapData = inputMapData; 
 
-					//var states=Object.keys(dataset[0][0]);
-					//console.log(dataset[0]["2006"]);
 					var big={};
 					//
-						var info={"insured":40, "uninsured":60};
+					var info={"insured":40, "uninsured":60};
 					var incomelist={};
 					var income=[0,1,2,3,4,5];
 					income.forEach(function(pr){
 						incomelist[pr]=info;
 					})
 
-					//console.log(statesNames);
+					
 					var racelist={};
 					var racel=[0,1,2,3]
 					racel.forEach(function(rc){
 						racelist[rc]=incomelist;
 					})
-					//console.log(racelist);
+
 					
 					var statesNames=[];
-					//console.log(dataset[0][2006]);
 					var array= dataset[0][2006];
-					//d3.selectAll('#metrics').remove();
 					for (var i = 1; i < 52; i++) {
-						//console.log(array[i][0]);
 						statesNames.push(array[i][0]);
 					}
 					var statobj={}
 					statesNames.forEach(function(state){
 						statobj[state]=racelist;
 					})
-					//console.log(statobj);
-					// for prop in incomelist{
-					// 	console.log(prop);
-					// }
-					
-					//console.log(incomelist);
 					
 
-					//console.log(statesNames);
-
-		var years=["2006","2007","2008","2009","2010","2011","2012","2013"];
-					//console.log(years);
+					var years=["2006","2007","2008","2009","2010","2011","2012","2013"];
 
 					years.forEach(function (yr) {
 						big [yr]=statobj;
 					})
 
 					console.log(big)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 					var menu = d3.select("#metrics");
@@ -426,9 +399,6 @@
 				});
 			});
 		});
-
-
-
 
 		</script>
 
