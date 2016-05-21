@@ -34,11 +34,28 @@
 		    pointer-events: none;			
 		}
 
+		/* Styling for the line charts 
+			Adapted from Mike Bostock 
+			http://bl.ocks.org/d3noob/8603837
+		*/
+			path { 
+				stroke-width: 1;
+				fill: none;
+			}
+
+/*			.axis path,
+			.axis line {
+				fill: none;
+				stroke: grey;
+				stroke-width: 1;
+				shape-rendering: crispEdges;
+			}*/			
+
 		</style>
 	</head>
 	<body>
 		<h1> Exploring ObamaCare </h1>
-		 <div id="addPane">
+		 <div id="addPane">f
 
 <body>
 
@@ -265,11 +282,170 @@
 		            div.transition()		
 		                .duration(500)		
 		                .style("opacity", 0);	
-		        }); 
+		        })
+		        .on("click", function(d) {
+		        	var clicked_state = d.properties.value["NAME"]; 
+		        	console.log(clicked_state, "got clicked!");
+		        	drawLineCharts(clicked_state);
+		        }
+		        );
 
 
 		}
 
+		/* Draws the line charts for the selected state 
+
+			Adapted from Mike Bostock 
+				http://bl.ocks.org/d3noob/8603837
+		*/
+
+ 
+
+
+
+
+		function drawLineCharts(clicked){
+			var	margin = {top: 30, right: 40, bottom: 30, left: 50},
+				width = 600 - margin.left - margin.right,
+				height = 270 - margin.top - margin.bottom;
+
+			var	parseDate = d3.time.format("%d-%b-%y").parse;
+
+			var	x = d3.time.scale().range([0, width]);
+			var	y = d3.scale.linear().range([height, 0]);
+
+			var	xAxis = d3.svg.axis().scale(x)
+				.orient("bottom").ticks(5);
+
+			var	yAxis = d3.svg.axis().scale(y)
+				.orient("left").ticks(5);
+
+			var	valueline = d3.svg.line()
+				.x(function(d) { return x(d.date); })
+				.y(function(d) { return y(d.close); });
+				
+			var	valueline2 = d3.svg.line()
+				.x(function(d) { return x(d.date); })
+				.y(function(d) { return y(d.open); });
+
+
+			if (!clicked){
+
+				//the default - no state clicked 
+					console.log("The default");
+					var	svg = d3.select("body")
+						.append("svg")
+							.attr("width", width + margin.left + margin.right)
+							.attr("height", height + margin.top + margin.bottom)
+						.append("g")
+							.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+					// Get the data
+
+
+					d3.csv("data2b.csv", function(error, data) {
+						data.forEach(function(d) {
+							d.date = parseDate(d.date);
+							d.close = +d.close;
+							d.open = +d.open;
+						});
+
+
+
+						// Scale the range of the data
+						x.domain(d3.extent(data, function(d) { return d.date; }));
+						y.domain([0, d3.max(data, function(d) { return Math.max(d.close, d.open); })]);
+
+						//d3.selectAll("path").remove();
+
+						//svg.selectAll("path").remove();
+
+						svg.append("path")		// Add the valueline path.
+							.attr("class", "line1")
+							.style("stroke", "steelblue")
+							.attr("d", valueline(data));
+
+						svg.append("path")		// Add the valueline2 path.
+							.attr("class", "line2")
+							.style("stroke", "red")
+							.attr("d", valueline2(data));
+
+						svg.append("g")			// Add the X Axis
+							.attr("class", "x axis")
+							.style("stroke", "black")
+							.attr("transform", "translate(0," + height + ")")
+							.call(xAxis);
+
+						svg.append("g")			// Add the Y Axis
+							.attr("class", "y axis")
+							.style("stroke", "black")
+							.call(yAxis);
+
+						svg.append("text")
+							.attr("transform", "translate(" + (width+3) + "," + y(data[0].open) + ")")
+							.attr("dy", ".35em")
+							.attr("text-anchor", "start")
+							.style("fill", "red")
+							.text("Open");
+
+						svg.append("text")
+							.attr("transform", "translate(" + (width+3) + "," + y(data[0].close) + ")")
+							.attr("dy", ".35em")
+							.attr("text-anchor", "start")
+							.style("fill", "steelblue")
+							.text("Close");
+
+
+					console.log(data.length-1);
+					console.log(data[data.length-1].open);
+					console.log(data[0].open);
+					console.log(y(data[0].open));
+					console.log(y(data[0].close));
+
+				});
+			}
+			if(clicked){
+				d3.csv("data-alt.csv", function(error, data) {
+			       	data.forEach(function(d) {
+				    	d.date = parseDate(d.date);
+				    	d.close = +d.close;
+				    });
+					var svg = d3.select("body").transition();
+
+					//make the changes 
+					svg.select(".line2")
+						.duration(750)
+						.attr("d", valueline2(data)); 
+				});
+
+			}
+
+		}
+
+
+
+		drawLineCharts(); 
+
+		// //Updates the line charts when a new state is clicked 
+		function updateLineCharts(){
+			console.log("updateLineCharts got called");
+		    // Get the data again
+		    d3.csv("data-alt.csv", function(error, data) {
+		       	data.forEach(function(d) {
+			    	d.date = parseDate(d.date);
+			    	d.close = +d.close;
+			    });
+			var svg = d3.select("body").transition();
+
+			//make the changes 
+			svg.select(".line2")
+				.duration(750)
+				.attr("d", valueline2(data)); 
+
+			});
+
+		}
+	
 
 		// Helper functions for creating the main JSON object //
 
@@ -371,6 +547,12 @@
 			visData = yearObj; 
 			//return yearObj; 
 		}	
+
+		function getLineData(){
+
+			var lineData = []
+		}
+
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
 		// are not displaying anything until the binding is done)
