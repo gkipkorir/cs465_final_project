@@ -395,7 +395,7 @@
 
 					var myobj=	createObject(dataset);
 					//console.log("here");
-					//console.log(myobj);
+					console.log(myobj);
 						
 					allData = dataset;
 					mapData = inputMapData; 
@@ -423,17 +423,17 @@
 						big [yr]=statesNames;
 					})
 
-					 var list=[];
+					 var list={};
 
 					
 					var stateinfo={race:racelist,income:incomelist};
 					var liststate=statesNames;
-					liststate.forEach(function(state){
+					liststate.forEach(function(mystate){
 						var st={};
-						st["Name"]=state;
-						st["info"]=stateinfo;
+						//st["Name"]=state;
+						list[mystate]=stateinfo;
 
-						list.push(st);
+						//list.push(st);
 
 					})
 					
