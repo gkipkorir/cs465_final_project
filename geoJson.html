@@ -96,6 +96,17 @@
 		<script type="text/javascript">
 
 		// create an SVG region in the usual way
+
+		/*TODO 	
+			* Clean up global variables 
+			* Remove print statements 
+			* Styling 
+			* Legends 
+			* Clean up directory - get rid of unnecessary files 
+			* Global min and global max 
+		*/
+
+
 		var width = 800, height = 500;
 
 
@@ -103,7 +114,7 @@
 				.append("svg")
 				.attr({"width":width, "height":height});
 
-		var visData, drawData, mapData, currentYear, currentRace, currentIncome, allData, raceData, incomeData; 
+		var visData, drawData, lineData, mapData, currentYear, currentRace, currentIncome, currentState, currentMetric, allData, raceData, incomeData; 
 
 		var years=["2006","2007","2008","2009","2010","2011","2012","2013"];
 		var racelist=[0,1,2,3];
@@ -301,24 +312,30 @@
 
  
 
-
-
-
 		function drawLineCharts(clicked){
+			currentState = "Alabama";
+			currentMetric = "Income";
+
+			var data = lineData[currentState][currentMetric]; 
+
+
+
 			var	margin = {top: 30, right: 40, bottom: 30, left: 50},
 				width = 600 - margin.left - margin.right,
 				height = 270 - margin.top - margin.bottom;
 
-			var	parseDate = d3.time.format("%d-%b-%y").parse;
 
-			var	x = d3.time.scale().range([0, width]);
+
+
+			var	x = d3.scale().linear().range([0, width]);
+			//var 
 			var	y = d3.scale.linear().range([height, 0]);
 
 			var	xAxis = d3.svg.axis().scale(x)
-				.orient("bottom").ticks(5);
+				.orient("bottom").ticks(8);
 
 			var	yAxis = d3.svg.axis().scale(y)
-				.orient("left").ticks(5);
+				.orient("left");
 
 			var	valueline = d3.svg.line()
 				.x(function(d) { return x(d.date); })
@@ -424,8 +441,6 @@
 
 
 
-		drawLineCharts(); 
-
 		// //Updates the line charts when a new state is clicked 
 		function updateLineCharts(){
 			console.log("updateLineCharts got called");
@@ -445,6 +460,9 @@
 			});
 
 		}
+
+		// Helper function that returns the data needed to draw line chart 
+
 	
 
 		// Helper functions for creating the main JSON object //
@@ -544,14 +562,54 @@
 				yearObj[year] = stateObj; 
 
 			}); 
-			visData = yearObj; 
-			//return yearObj; 
+			return yearObj; 
 		}	
 
-		function getLineData(){
 
-			var lineData = []
+		function createLineData(myobj){
+			function parser (obj){
+				var newObj = {}; 
+				statesNames.forEach(function(state){
+
+					stateIncome = {};
+					stateIncome["Income"] = {};
+					stateIncome["Race"] = {};
+
+					incomelist.forEach(function(income){
+						//loop throught the years 
+						var incValues = [];
+						var raceValues = [];
+						years.forEach(function(yr){
+							var inc=obj[yr][state][0][income];
+							incValues.push([yr, inc]); 
+
+							if (income < 4){ //valid for getting race value 
+								var race = obj[yr][state][income][0] //get all races for 
+								raceValues.push([yr, race]); 
+							}
+						});
+						stateIncome["Income"][income] = incValues;
+
+						if (income < 4){ //Adding races which go till 4 
+							stateIncome["Race"][income] = raceValues; 
+						}
+						
+
+					}); 
+
+				newObj[state] = stateIncome; 
+
+				});
+
+				return newObj; 
+
+			}
+
+			return parser(myobj);
+
 		}
+
+
 
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
@@ -575,7 +633,11 @@
 						statesNames.push(array[i][0]);
 					}
 
-					var myobj=	createObject(dataset);
+					visData = createObject(dataset); //create general object. 
+
+					lineData = createLineData(visData); //create object for drawing line charts
+
+					console.log("lineData", lineData);
 					//console.log(myobj);
 						
 					allData = dataset;
@@ -615,6 +677,7 @@
 					}); 
 
 					drawVis(); 
+					drawLineCharts(); 
 
 					// set the behavior on a change to the menu (i.e., update the coloring)
 
@@ -651,7 +714,6 @@
 				});
 			});
 		});
-
 
 
 
