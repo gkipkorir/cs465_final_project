@@ -6,8 +6,10 @@
 		<title>
 			Using GeoJSON
 		</title>
+		  <link rel="stylesheet" href="http://thematicmapping.org/playground/d3/d3.slider/d3.slider.css" />  
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+		<script src="http://thematicmapping.org/playground/d3/d3.slider/d3.slider.js"></script>
 
 		<style type="text/css">
 
@@ -40,28 +42,37 @@
 
 <body>
 
-<select>
+<select id= "races">
   
   <optgroup label="Race">
-     <option value="mercedes">All Races</option>
-    <option value="mercedes">Black</option>
-    <option value="audi">White</option>
-     <option value="mercedes">Latino</option>
+     <option value=0>All Races</option>
+    <option value=1>Black</option>
+    <option value=2>White not Hispanic</option>
+     <option value=3>Hispanic not White</option>
   </optgroup>
 </select>
-      <select>
+
+  <select id = "income">
   
-  <optgroup label="Race">
-     <option value="mercedes">All Income</option>
-    <option value="mercedes">1</option>
-    <option value="audi">2</option>
-     <option value="mercedes">3</option>
-     <option value="audi">4</option>
-     <option value="mercedes">5</option>
+  <optgroup label="Income">
+     <option value=0>All Income</option>
+    <option value=1>1</option>
+    <option value=2>2</option>
+     <option value=3>3</option>
+     <option value=4>4</option>
+     <option value=5>5</option>
   </optgroup>
+
+	</select>
+
+<select id = "years">
+
+	<optgroup label="Metrics" id="metrics"></optgroup>
+
+
 </select>
      
-     
+ 
 
   </div>
 
@@ -112,8 +123,22 @@
 
 		//set the new Year and redraw the Vis 
 		function setYear(year){
-			console.log("setYear got called!");
+			console.log("setYear got called! Year: ", year);
 			currentYear = year;
+			drawVis(); 
+		}
+
+		//set the new Race and redraw the Vis 
+		function setRace(race){
+			console.log("setRace got called! : ",race);
+			currentRace = race;
+			drawVis(); 
+		}
+
+		//set the new Income and redraw the Vis 
+		function setIncome(income){
+			//console.log("setRace got called! : ",race);
+			currentIncome = income;
 			drawVis(); 
 		}
 
@@ -122,7 +147,7 @@
 		}
 		//current race default 
 		if (currentRace === undefined){
-			currentRace = 3; 
+			currentRace = 0; 
 
 		//currentIncome default 
 		}if (currentIncome === undefined){
@@ -174,42 +199,6 @@
 		} 
 
 
-		function visRaces(){
-
-				drawData = raceData;
-
-				//some deafult sor TESTING //TODO automate this accordingly 
-
-				selectedRace = 3; 
-
-
-				//populate censusData 
-
-				var censusData = drawData[currentYear];
-
-				var censusMap = d3.map();
-
-				for (var state in censusData){ 
-
-					if (censusData.hasOwnProperty(state)){
-
-						//calling this the same variables as generaVis for testing 
-						newObj = {"NAME": state, "PUI": censusData[state][selectedRace][0], "RACE_DESC": censusData[state][selectedRace][1]}
-
-						censusMap.set(state, newObj); 
-					}
-				}
-				//censusData.forEach(function(d){censusMap.set(d.NAME,d)});
-
-				// loop through all of the path data, attaching the appropriate
-				// record to each one based on the name
-				for (var i = 0; i < mapData.features.length; i++){ //TODO ensure that mapData refreshes everytime 
-					var name = mapData.features[i].properties.name;
-					mapData.features[i].properties.value = censusMap.get(name);
-				}
-		}
-
-
 		//draw the map 
 		function drawVis(){
 
@@ -236,7 +225,7 @@
 
 				// call the visualtion for non specific data 
 
-				visGeneral()
+				visGeneral();
 
 				//visRaces();
 
@@ -378,10 +367,9 @@
 
 				yearObj[year] = stateObj; 
 
-			});
-			//console.log("yearObj: ", yearObj);  
+			}); 
 			visData = yearObj; 
-			return yearObj; 
+			//return yearObj; 
 		}	
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
@@ -447,10 +435,34 @@
 					drawVis(); 
 
 					// set the behavior on a change to the menu (i.e., update the coloring)
-					d3.select("select").on("change", function () {
+
+
+					d3.select("#years").on("change", function () {
 						//console.log("change happened!");
+						console.log("this.value", this.value);
 						setYear(this.value);
 						});
+					d3.select("#races").on("change", function () {
+						console.log("change happened! :", this.value);
+
+						setRace(this.value);
+						});
+					d3.select("#income").on("change", function () {
+						console.log("change happened! :", this.value);
+
+						setIncome(this.value);
+						});
+
+					//for the axis 
+					// d3.select('#slider6').call(d3.slider().axis(true).min(2006).max(2013).step(1));
+					// d3.slider().on("slide", function(evt, value) {
+					//   d3.select('#slider6').text(value);
+					// })
+
+				    d3.select('#slider6').call(d3.slider().axis(true).min(2006).max(2013).step(1).on("slide", function(evt, value) {
+				      d3.select('#slider6text').text(value);
+				      setYear(value);
+				    }));
 
 					// create a map of our census data, so we can easily find records
 					// correspondng to a particular stat
@@ -463,9 +475,17 @@
 
 		</script>
 
-		<select><optgroup label="Metrics" id="metrics"></optgroup></select>
+		
 
 <div>
+
+</div>
+
+<div id= "slider6">
+    
+    <h2> Current Years <span id="slider6text">2006</span></h2>
+    
+    <div id="slider6"></div>
 
 </div>
 
