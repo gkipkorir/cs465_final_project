@@ -3,7 +3,6 @@
 
     http://thematicmapping.org/playground/d3/d3.slider/
 
-
     ////////
     D3.js Slider
     Inspired by jQuery UI Slider
@@ -32,7 +31,7 @@ d3.slider = function module() {
       dispatch = d3.dispatch("slide"),
       formatPercent = d3.format(".2%"),
       tickFormat = d3.format(".0"),
-      sliderLength = 150;
+      sliderLength;
 
   function slider(selection) {
     selection.each(function() {
@@ -63,16 +62,16 @@ d3.slider = function module() {
         div.on("click", onClickHorizontal);
         drag.on("drag", onDragHorizontal);
         handle.style("left", formatPercent(scale(value)));
-        // sliderLength = parseInt(div.style("width"), 10);
-        //sliderLength = 150;//parseInt(div.style("width"), 10);
-
+        sliderLength = parseInt(div.style("width"), 10);
+        console.log("sliderLength", sliderLength);
 
       } else { // Vertical
 
         div.on("click", onClickVertical);
         drag.on("drag", onDragVertical);
         handle.style("bottom", formatPercent(scale(value)));
-        // sliderLength = parseInt(div.style("height"), 10);
+
+        sliderLength = parseInt(div.style("height"), 10);
 
       }
       

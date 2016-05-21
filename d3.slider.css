@@ -8,6 +8,7 @@
 
 .d3-slider-horizontal {
     height: .8em;
+    width: 500px; //added this 
 }  
 
 .d3-slider-vertical {
@@ -42,6 +43,7 @@
 
 .d3-slider-axis-bottom {
     top: .8em;
+    width: 400; //added this
 }
 
 .d3-slider-axis-right {
