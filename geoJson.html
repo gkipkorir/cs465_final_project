@@ -369,7 +369,7 @@
 
 			}); 
 			visData = yearObj; 
-			//return yearObj; 
+			return yearObj; 
 		}	
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
@@ -383,8 +383,8 @@
 				//console.log(race_Data);
 			
 				d3.json("income_data.txt", function (dataset) {
-
-
+					//console.log("original");
+					//console.log(dataset);
 					//console.log(dataset[0][2006]);
 					var array= dataset[0][2006];
 					//d3.selectAll('#metrics').remove();
@@ -394,6 +394,7 @@
 					}
 
 					var myobj=	createObject(dataset);
+					//console.log("here");
 					//console.log(myobj);
 						
 					allData = dataset;
@@ -402,7 +403,7 @@
 					//var states=Object.keys(dataset[0][0]);
 					//console.log(dataset[0]["2006"]);
 					var big={};
-					//
+					
 					
 
 					//console.log(statesNames);
@@ -422,7 +423,28 @@
 						big [yr]=statesNames;
 					})
 
-					//console.log(big)
+					 var list=[];
+
+					
+					var stateinfo={race:racelist,income:incomelist};
+					var liststate=statesNames;
+					liststate.forEach(function(state){
+						var st={};
+						st["Name"]=state;
+						st["info"]=stateinfo;
+
+						list.push(st);
+
+					})
+					
+
+					console.log(list);
+
+
+
+
+
+
 
 
 					var menu = d3.select("#metrics");
