@@ -34,11 +34,28 @@
 		    pointer-events: none;			
 		}
 
+		/* Styling for the line charts 
+			Adapted from Mike Bostock 
+			http://bl.ocks.org/d3noob/8603837
+		*/
+			path { 
+				stroke-width: 1;
+				fill: none;
+			}
+
+/*			.axis path,
+			.axis line {
+				fill: none;
+				stroke: grey;
+				stroke-width: 1;
+				shape-rendering: crispEdges;
+			}*/			
+
 		</style>
 	</head>
 	<body>
 		<h1> Exploring ObamaCare </h1>
-		 <div id="addPane">
+		 <div id="addPane">f
 
 <body>
 
@@ -79,6 +96,17 @@
 		<script type="text/javascript">
 
 		// create an SVG region in the usual way
+
+		/*TODO 	
+			* Clean up global variables 
+			* Remove print statements 
+			* Styling 
+			* Legends 
+			* Clean up directory - get rid of unnecessary files 
+			* Global min and global max 
+		*/
+
+
 		var width = 800, height = 500;
 
 
@@ -86,7 +114,7 @@
 				.append("svg")
 				.attr({"width":width, "height":height});
 
-		var visData, drawData, mapData, currentYear, currentRace, currentIncome, allData, raceData, incomeData; 
+		var visData, drawData, lineData, mapData, currentYear, currentRace, currentIncome, currentState, currentMetric, allData, raceData, incomeData; 
 
 		var years=["2006","2007","2008","2009","2010","2011","2012","2013"];
 		var racelist=[0,1,2,3];
@@ -265,11 +293,260 @@
 		            div.transition()		
 		                .duration(500)		
 		                .style("opacity", 0);	
-		        }); 
+		        })
+		        .on("click", function(d) {
+		        	var clicked_state = d.properties.value["NAME"]; 
+		        	console.log(clicked_state, "got clicked!");
+		        	drawLineCharts(clicked_state);
+		        }
+		        );
 
 
 		}
 
+		/* Draws the line charts for the selected state 
+
+			Adapted from Mike Bostock 
+				http://bl.ocks.org/d3noob/8603837
+		*/
+
+ 	function toObject(arr) {
+					  var rv = {};
+					  for (var i = 0; i < arr.length; ++i)
+					    rv[i] = arr[i];
+					  return rv;
+					}
+
+
+
+
+		function drawLineCharts(clicked){
+			currentState = "Alabama";
+			currentMetric = "Race";
+
+			var data = lineData[currentState][currentMetric]; 
+			console.log(data);
+
+			var arr = Object.keys(data).map(function (key) {return data[key]});
+			console.log(arr);
+			var final=[];
+					
+			for(var element in data){
+				var obj={};
+				obj[currentMetric]=element;
+				obj["values"]= data[element]
+				final.push(obj);
+			}
+			console.log(final);
+
+			function fixer(finall){
+					finall.forEach(function(obj){
+				var modified={};
+				modified["values"]=[];
+				modified[currentMetric]= obj[currentMetric];
+				obj.values.forEach(function (pair){
+					var smobj={};
+					smobj["year"]=pair[0];
+					smobj["PUI"]=pair[1];
+					modified.values.push(smobj);
+
+				})
+				return modified;
+			});
+			}
+			var f= fixer(final);
+			console.log("the final")
+			console.log(f);
+			// data.forEach(function(d){
+			// 	console.log("inside");
+			// 	console.log(d);
+			// })
+
+
+
+			var	margin = {top: 30, right: 40, bottom: 30, left: 50},
+				width = 600 - margin.left - margin.right,
+				height = 270 - margin.top - margin.bottom;
+
+
+
+
+			var	xScale = d3.scale.linear().range([0, width]);
+			//var 
+			var	yScale = d3.scale.linear().range([height, 0]);
+
+			var	xAxis = d3.svg.axis().scale(xScale)
+				.orient("bottom").ticks(8);
+
+			var	yAxis = d3.svg.axis().scale(yScale)
+				.orient("left");
+
+			var	valueline = d3.svg.line()
+				.x(function(d) { return x(d.date); })
+				.y(function(d) { return y(d.close); });
+				
+			var	valueline2 = d3.svg.line()
+				.x(function(d) { return x(d.date); })
+				.y(function(d) { return y(d.open); });
+
+
+			if (!clicked){
+
+				//the default - no state clicked 
+					console.log("The default");
+					var	svg = d3.select("body")
+						.append("svg")
+						.attr("width", width + margin.left + margin.right)
+
+
+					var chart = svg.append('g')
+							.attr("transform","translate("+margin.left + "," + margin.top + ")");
+					
+					var lineGenerator = d3.svg.line()
+							.x(function(d){return margins.left + xScale(+d[0])})
+							.y(function(d){return margins.top + yScale(+d[1])})
+							.interpolate("linear");
+
+
+						arr.forEach(function(entry, index){
+							//console.log(entry);
+
+							//Add lines
+							chart.append("path")
+							.datum(entry)
+							.attr("class", "line")
+							.attr("d", lineGenerator())
+							//.attr("stroke", colorScale(index))
+							.attr("stroke-width", 2)
+							.attr("fill", "none")
+							//.attr('data-legend', "Tree " + entry.key)
+							.//attr('data-legend-pos', +entry.key);
+
+							//Add dots
+							entry.forEach(function(dot){
+								chart.append("circle")
+								.attr('cx', margin.left + xScale(+dot[0]))
+								.attr('cy', +yScale(+dot[1]))
+								.attr('r', 3)
+								//.attr('fill', colorScale(index));
+							});
+
+});
+
+
+
+
+
+
+
+
+
+
+
+					// d3.csv("data2b.csv", function(error, data) {
+					// 	data.forEach(function(d) {
+					// 		d.date = parseDate(d.date);
+					// 		d.close = +d.close;
+					// 		d.open = +d.open;
+					// 	});
+
+
+
+					// 	// Scale the range of the data
+					// 	x.domain(d3.extent(data, function(d) { return d.date; }));
+					// 	y.domain([0, d3.max(data, function(d) { return Math.max(d.close, d.open); })]);
+
+					// 	//d3.selectAll("path").remove();
+
+					// 	//svg.selectAll("path").remove();
+
+					// 	svg.append("path")		// Add the valueline path.
+					// 		.attr("class", "line1")
+					// 		.style("stroke", "steelblue")
+					// 		.attr("d", valueline(data));
+
+					// 	svg.append("path")		// Add the valueline2 path.
+					// 		.attr("class", "line2")
+					// 		.style("stroke", "red")
+					// 		.attr("d", valueline2(data));
+
+					// 	svg.append("g")			// Add the X Axis
+					// 		.attr("class", "x axis")
+					// 		.style("stroke", "black")
+					// 		.attr("transform", "translate(0," + height + ")")
+					// 		.call(xAxis);
+
+					// 	svg.append("g")			// Add the Y Axis
+					// 		.attr("class", "y axis")
+					// 		.style("stroke", "black")
+					// 		.call(yAxis);
+
+					// 	svg.append("text")
+					// 		.attr("transform", "translate(" + (width+3) + "," + y(data[0].open) + ")")
+					// 		.attr("dy", ".35em")
+					// 		.attr("text-anchor", "start")
+					// 		.style("fill", "red")
+					// 		.text("Open");
+
+					// 	svg.append("text")
+					// 		.attr("transform", "translate(" + (width+3) + "," + y(data[0].close) + ")")
+					// 		.attr("dy", ".35em")
+					// 		.attr("text-anchor", "start")
+					// 		.style("fill", "steelblue")
+					// 		.text("Close");
+
+
+					// console.log(data.length-1);
+					// console.log(data[data.length-1].open);
+					// console.log(data[0].open);
+					// console.log(y(data[0].open));
+					// console.log(y(data[0].close));
+
+				
+			}
+			if(clicked){
+				d3.csv("data-alt.csv", function(error, data) {
+			       	data.forEach(function(d) {
+				    	d.date = parseDate(d.date);
+				    	d.close = +d.close;
+				    });
+					var svg = d3.select("body").transition();
+
+					//make the changes 
+					svg.select(".line2")
+						.duration(750)
+						.attr("d", valueline2(data)); 
+				});
+
+			}
+
+		}
+
+
+
+		// //Updates the line charts when a new state is clicked 
+		function updateLineCharts(){
+			console.log("updateLineCharts got called");
+		    // Get the data again
+		    d3.csv("data-alt.csv", function(error, data) {
+		       	data.forEach(function(d) {
+			    	d.date = parseDate(d.date);
+			    	d.close = +d.close;
+			    });
+			var svg = d3.select("body").transition();
+
+			//make the changes 
+			svg.select(".line2")
+				.duration(750)
+				.attr("d", valueline2(data)); 
+
+			});
+
+		}
+
+		// Helper function that returns the data needed to draw line chart 
+
+	
 
 		// Helper functions for creating the main JSON object //
 
@@ -368,9 +645,55 @@
 				yearObj[year] = stateObj; 
 
 			}); 
-			visData = yearObj; 
 			return yearObj; 
 		}	
+
+
+		function createLineData(myobj){
+			function parser (obj){
+				var newObj = {}; 
+				statesNames.forEach(function(state){
+
+					stateIncome = {};
+					stateIncome["Income"] = {};
+					stateIncome["Race"] = {};
+
+					incomelist.forEach(function(income){
+						//loop throught the years 
+						var incValues = [];
+						var raceValues = [];
+						years.forEach(function(yr){
+							var inc=obj[yr][state][0][income];
+							incValues.push([yr, inc]); 
+
+							if (income < 4){ //valid for getting race value 
+								var race = obj[yr][state][income][0] //get all races for 
+								raceValues.push([yr, race]); 
+							}
+						});
+						stateIncome["Income"][income] = incValues;
+
+						if (income < 4){ //Adding races which go till 4 
+							stateIncome["Race"][income] = raceValues; 
+						}
+						
+
+					}); 
+
+				newObj[state] = stateIncome; 
+
+				});
+
+				return newObj; 
+
+			}
+
+			return parser(myobj);
+
+		}
+
+
+
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
 		// are not displaying anything until the binding is done)
@@ -383,8 +706,8 @@
 				//console.log(race_Data);
 			
 				d3.json("income_data.txt", function (dataset) {
-					//console.log("original");
-					//console.log(dataset);
+
+
 					//console.log(dataset[0][2006]);
 					var array= dataset[0][2006];
 					//d3.selectAll('#metrics').remove();
@@ -393,9 +716,12 @@
 						statesNames.push(array[i][0]);
 					}
 
-					var myobj=	createObject(dataset);
-					//console.log("here");
-					console.log(myobj);
+					visData = createObject(dataset); //create general object. 
+
+					lineData = createLineData(visData); //create object for drawing line charts
+
+					//console.log("lineData", lineData);
+					//console.log(myobj);
 						
 					allData = dataset;
 					mapData = inputMapData; 
@@ -403,13 +729,12 @@
 					//var states=Object.keys(dataset[0][0]);
 					//console.log(dataset[0]["2006"]);
 					var big={};
-					
+					//
 					
 
 					//console.log(statesNames);
 					var o={};
-					var racelist={0:[],1:[],2:[],3:[]};
-					var myincome={0:[],1:[],2:[],3:[],4:[],5:[]};
+					var racelist=[0,1,2,3];
 					
 
 					//console.log(o);
@@ -424,48 +749,7 @@
 						big [yr]=statesNames;
 					})
 
-					 var list={};
-
-					
-					var stateinfo={race:racelist,income:myincome};
-					var liststate=statesNames;
-					liststate.forEach(function(mystate){
-						var st={};
-						//st["Name"]=state;
-						list[mystate]=stateinfo;
-
-						//list.push(st);
-
-					})
-					
-
-					//console.log(list);
-					//console.log(myobj);
-
-					function parser (obj, statelist){
-						statesNames.forEach(function(state){
-								years.forEach(function(yr){
-								//console.log(yr);
-								incomelist.forEach(function(incomee){
-									//console.log(obj[yr][state]);
-									 var inc=obj[yr][state][0][incomee];
-									 //console.log([state, yr,incomee])
-									  var array=[  yr , inc]
-									   statelist[String(state)]["income"][incomee]
-						
-									  statelist[String(state)]["income"][incomee].push(array)
-								});
-
-
-							});
-						});
-
-					}
-
-
-					parser(myobj,list);
-
-					console.log(list);
+					//console.log(big)
 
 
 					var menu = d3.select("#metrics");
@@ -476,6 +760,7 @@
 					}); 
 
 					drawVis(); 
+					drawLineCharts(); 
 
 					// set the behavior on a change to the menu (i.e., update the coloring)
 
@@ -512,7 +797,6 @@
 				});
 			});
 		});
-
 
 
 
