@@ -1,0 +1,153 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>edupleich_hw4</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.9.0/d3-legend.js"></script>
+  <style type="text/css">
+    .axis text{
+      font-family:sans-serif;
+      font-size:11px;
+    }
+    path {
+      stroke: steelblue;
+      stoke-width:2;
+      fill: none;
+
+    }
+
+    .legend {
+      background: yellow;
+    }
+    .axis path,
+    .axis line{
+      fill:none;
+      stroke:gray;
+      stroke-opacity:0.3;
+    }
+  </style>
+
+</head>
+<body>
+  <h3>Homework 5</h3>
+  <p>Gilbert Kipkorir & Enrique Dupleich - HW4</p>
+
+  <script>
+    d3.csv("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/orange.csv", function(dataset){
+      var width = 600;
+      var height = 600;
+
+
+      var margins = {top:60, bottom: 60, left: 60, right:60};
+
+      var chartWidth = width - margins.left - margins.right;
+      var chartHeight = height - margins.top - margins.bottom;
+
+      console.log("before nesting data: ", dataset);
+      var newdata = d3.nest()
+      .key(function(d){return d.Tree;})
+      .entries(dataset);
+
+      console.log("nested data", newdata);
+
+      var ymax = d3.max(dataset,function(d){return +d.circumference;});
+      var xmax = d3.max(dataset,function(d){return +d.age;});
+
+
+      var xScale = d3.scale.linear().range([0,chartWidth],.1).nice().domain([0,xmax]);
+      var yScale = d3.scale.linear().range([chartHeight, 0]).nice().domain([0,ymax]);
+      var treeColor = d3.scale.ordinal()
+  .domain(1,5)
+  .range([ "rgb(153, 107, 195)", "rgb(56, 106, 197)", "rgb(93, 199, 76)", "rgb(223, 199, 31)", "rgb(234, 118, 47)"]);
+
+      // create the line function
+      var line = d3.svg.line()
+      .x(function(d) { return xScale(d.age); })
+      .y(function(d) { return yScale(d.circumference); });
+
+      var legend = d3.legend.color()
+        .labelFormat(d3.format(".2f"))
+        .scale(treeColor)
+        .title("Tree Number");
+
+      // create the SVG path object and pass it the line for calculating the commands 
+      var svg = d3.select('body')
+      .append('svg')
+      .attr({
+        width:width,
+        height:height
+      });
+
+      var chart = svg.append("g")
+      .attr("transform","translate("+margins.left + "," + margins.top + ")");
+
+
+
+      var xAxis = d3.svg.axis()
+      .scale(xScale)
+      .orient("bottom");
+
+      chart.append("g")
+      .attr("class","axis")
+      .attr("transform", "translate(0, " + chartHeight+")")
+      .call(xAxis)
+      .append("text")
+      .attr({
+        "x":chartWidth/2,
+        "y":margins.bottom/2,
+              "text-anchor":"middle" // set so the (x,y) of the text is in the middle bottom
+            })
+      .text("Age");
+
+     
+
+      var yAxis = d3.svg.axis()
+      .scale(yScale)
+      .orient("left")
+      .innerTickSize(-chartWidth)
+      .outerTickSize(0)
+      .tickPadding(10);
+
+      chart.append("g")
+      .attr("class","axis")
+      .call(yAxis)
+      .append("text")
+      .attr({
+        "x":-chartHeight/2,
+        "y":3 * -margins.left/4,
+        "text-anchor":"middle",
+        "transform" : "rotate(-90)"
+      })
+      .text("Circumference");
+
+      newdata.forEach(function(d){
+        chart.append("path")
+        .datum(d.values)
+        .attr("class", "line")
+        .attr("d", line)
+        .style("stroke", function(d){return treeColor(d[0].Tree);});
+
+      });
+
+      chart.selectAll('circle')
+      .data(dataset)
+      .enter()
+      .append('circle')
+      .attr({
+        cx:function(d){return xScale(+d.age);},
+        cy:function(d){return yScale(+d.circumference);},
+        r:function(d){return 2;}
+      });
+
+      chart.append("g")
+        .attr("transform", "translate("+(chartWidth-100)+","+(chartHeight-150)+")")
+        .attr("class","legend")
+        .call(legend);
+    });
+
+  </script>
+</body>
+</html>
