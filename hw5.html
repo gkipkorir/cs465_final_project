@@ -46,6 +46,10 @@
       var chartWidth = width - margins.left - margins.right;
       var chartHeight = height - margins.top - margins.bottom;
 
+
+
+
+
       console.log("before nesting data: ", dataset);
       var newdata = d3.nest()
       .key(function(d){return d.Tree;})
@@ -123,8 +127,12 @@
       })
       .text("Circumference");
 
+
+
+
       newdata.forEach(function(d){
         chart.append("path")
+        .exit().remove()
         .datum(d.values)
         .attr("class", "line")
         .attr("d", line)
