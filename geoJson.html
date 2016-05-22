@@ -322,25 +322,53 @@
 			currentMetric = "Income";
 
 			var data = lineData[currentState][currentMetric]; 
+			console.log(data);
+
+			var width = 600;
+	      	var height = 600;
+	      	var margins = {top:60, bottom: 60, left: 60, right:60};
+	     	var chartWidth = width - margins.left - margins.right;
+	      	var chartHeight = height - margins.top - margins.bottom;
+	      	var ymax = d3.max(data,function(d){return +d.PUI;});
+
+	      	var ymax = d3.max(data, function(d){
+	      		//console.log("d.vla ", d["values"]);
+
+
+	      		return d3.max(d["values"], function (e){
+	      				return e["PUI"];
+	      			}
+	      			);
+
+	      	});
+	      	console.log("ymax", ymax); 
+     		 var xmax = d3.max(data,function(d){return +d.year;});
+     		 console.log(ymax);
 
 
 
-			var	margin = {top: 30, right: 40, bottom: 30, left: 50},
-				width = 600 - margin.left - margin.right,
-				height = 270 - margin.top - margin.bottom;
 
 
 
 
-			var	x = d3.scale().linear().range([0, width]);
-			//var 
-			var	y = d3.scale.linear().range([height, 0]);
 
-			var	xAxis = d3.svg.axis().scale(x)
-				.orient("bottom").ticks(8);
+			}
+			// var	margin = {top: 30, right: 40, bottom: 30, left: 50},
+			// 	width = 600 - margin.left - margin.right,
+			// 	height = 270 - margin.top - margin.bottom;
 
-			var	yAxis = d3.svg.axis().scale(y)
-				.orient("left");
+
+
+
+			// var	x = d3.scale.linear().range([0, width]);
+			// //var 
+			// var	y = d3.scale.linear().range([height, 0]);
+
+			// var	xAxis = d3.svg.axis().scale(x)
+			// 	.orient("bottom").ticks(8);
+
+			// var	yAxis = d3.svg.axis().scale(y)
+			// 	.orient("left");
 
 			// var	valueline = d3.svg.line()
 			// 	.x(function(d) { return x(d[0]); }) //year 
@@ -356,99 +384,101 @@
 
 
 
-			if (!clicked){
+		// 	if (!clicked){
 
-				//the default - no state clicked 
-					console.log("The default");
+		// 		//the default - no state clicked 
+		// 			console.log("The default");
 
-					var	svg = d3.select("body")
-						.append("svg")
-							.attr("width", width + margin.left + margin.right)
-							.attr("height", height + margin.top + margin.bottom)
-						.append("g")
-							.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		// 			var	svg = d3.select("body")
+		// 				.append("svg")
+		// 					.attr("width", width + margin.left + margin.right)
+		// 					.attr("height", height + margin.top + margin.bottom)
+		// 				.append("g")
+		// 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-					// Get the data
-
-
-					d3.csv("data2b.csv", function(error, data) {
-						data.forEach(function(d) {
-							d.date = parseDate(d.date);
-							d.close = +d.close;
-							d.open = +d.open;
-						});
+		// 			// Get the data
 
 
-
-						// Scale the range of the data
-						x.domain(d3.extent(data, function(d) { return d.date; }));
-						y.domain([0, d3.max(data, function(d) { return Math.max(d.close, d.open); })]);
-
-						//d3.selectAll("path").remove();
-
-						//svg.selectAll("path").remove();
-
-						svg.append("path")		// Add the valueline path.
-							.attr("class", "line1")
-							.style("stroke", "steelblue")
-							.attr("d", valueline(data));
-
-						svg.append("path")		// Add the valueline2 path.
-							.attr("class", "line2")
-							.style("stroke", "red")
-							.attr("d", valueline2(data));
-
-						svg.append("g")			// Add the X Axis
-							.attr("class", "x axis")
-							.style("stroke", "black")
-							.attr("transform", "translate(0," + height + ")")
-							.call(xAxis);
-
-						svg.append("g")			// Add the Y Axis
-							.attr("class", "y axis")
-							.style("stroke", "black")
-							.call(yAxis);
-
-						svg.append("text")
-							.attr("transform", "translate(" + (width+3) + "," + y(data[0].open) + ")")
-							.attr("dy", ".35em")
-							.attr("text-anchor", "start")
-							.style("fill", "red")
-							.text("Open");
-
-						svg.append("text")
-							.attr("transform", "translate(" + (width+3) + "," + y(data[0].close) + ")")
-							.attr("dy", ".35em")
-							.attr("text-anchor", "start")
-							.style("fill", "steelblue")
-							.text("Close");
+		// 			// d3.csv("data2b.csv", function(error, data) {
+		// 			// 	data.forEach(function(d) {
+		// 			// 		d.date = parseDate(d.date);
+		// 			// 		d.close = +d.close;
+		// 			// 		d.open = +d.open;
+		// 			// 	});
 
 
-					console.log(data.length-1);
-					console.log(data[data.length-1].open);
-					console.log(data[0].open);
-					console.log(y(data[0].open));
-					console.log(y(data[0].close));
 
-				});
-			}
-			if(clicked){
-				d3.csv("data-alt.csv", function(error, data) {
-			       	data.forEach(function(d) {
-				    	d.date = parseDate(d.date);
-				    	d.close = +d.close;
-				    });
-					var svg = d3.select("body").transition();
+		// 				// Scale the range of the data
+		// 				x.domain(d3.extent(data, function(d) { return d.date; }));
+		// 				y.domain([0, d3.max(data, function(d) { return Math.max(d.close, d.open); })]);
 
-					//make the changes 
-					svg.select(".line2")
-						.duration(750)
-						.attr("d", valueline2(data)); 
-				});
+		// 				//d3.selectAll("path").remove();c
 
-			}
+		// 				//svg.selectAll("path").remove();
 
-		}
+		// 				svg.append("path")		// Add the valueline path.
+		// 					.attr("class", "line1")
+		// 					.style("stroke", "steelblue")
+		// 					.attr("d", valueline(data));
+
+		// 				svg.append("path")		// Add the valueline2 path.
+		// 					.attr("class", "line2")
+		// 					.style("stroke", "red")
+		// 					.attr("d", valueline2(data));
+
+		// 				svg.append("g")			// Add the X Axis
+		// 					.attr("class", "x axis")
+		// 					.style("stroke", "black")
+		// 					.attr("transform", "translate(0," + height + ")")
+		// 					.call(xAxis);
+
+		// 				svg.append("g")			// Add the Y Axis
+		// 					.attr("class", "y axis")
+		// 					.style("stroke", "black")
+		// 					.call(yAxis);
+
+		// 				svg.append("text")
+		// 					.attr("transform", "translate(" + (width+3) + "," + y(data[0].open) + ")")
+		// 					.attr("dy", ".35em")
+		// 					.attr("text-anchor", "start")
+		// 					.style("fill", "red")
+		// 					.text("Open");
+
+		// 				svg.append("text")
+		// 					.attr("transform", "translate(" + (width+3) + "," + y(data[0].close) + ")")
+		// 					.attr("dy", ".35em")
+		// 					.attr("text-anchor", "start")
+		// 					.style("fill", "steelblue")
+		// 					.text("Close");
+
+
+		// 			// 
+
+
+
+
+		// 		});
+		// 	}
+		// 	if(clicked){
+		// 		d3.csv("data-alt.csv", function(error, data) {
+		// 	       	data.forEach(function(d) {
+		// 		    	d.date = parseDate(d.date);
+		// 		    	d.close = +d.close;
+		// 		    });
+		// 			var svg = d3.select("body").transition();
+
+		// 			//make the changes 
+		// 			svg.select(".line2")
+		// 				.duration(750)
+		// 				.attr("d", valueline2(data)); 
+		// 		});
+
+		// 	}
+
+		// }
+
+
+
 
 
 
@@ -663,7 +693,7 @@
 
 					lineData = createLineData(visData); //create object for drawing line charts
 
-					console.log("lineData", lineData);
+					console.log( lineData["Alabama"]["Income"]);
 					//console.log(myobj);
 						
 					allData = dataset;
