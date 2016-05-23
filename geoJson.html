@@ -97,9 +97,31 @@ border: 3px solid gray;
 	</head>
 	<body>
 		<h1> Exploring ObamaCare </h1>
-		 <!-- <div id="addPane"> -->
+		<!--  <div id="addPane"> -->
 
 <body>
+	<div id="selectmetric"> 
+		<select id= "races">
+  
+		  <optgroup label="Race">
+		     <option value=0>All Races</option>
+		    <option value=1>White alone, not Hispanic</option>
+		    <option value=2>Black alone, not Hispanic</option>
+		     <option value=3>Hispanic (any race)</option>
+		  </optgroup>
+		</select>
+
+	 <select id = "years">
+
+		<optgroup label="Metrics" id="metrics"></optgroup>
+
+
+	</select>
+
+	<select id="incomes">
+		<optgroup label="Income Levels" id="income_metric"></optgroup>
+	</select>
+	</div>
 <div id="wrapper">
   <div id="mapdiv">
  
@@ -118,13 +140,7 @@ border: 3px solid gray;
     <!-- <div id="slider6"></div> -->
 
 
-<!-- <select id = "years">
 
-	<optgroup label="Metrics" id="metrics"></optgroup>
-
-
-</select> -->
-     
  
 
   </div>
@@ -278,12 +294,40 @@ border: 3px solid gray;
 
 				//var max 
 
-				color.domain([0, 50]);
+				color.domain([0, 55]);
 
 
 				// call the visualtion for non specific data 
 
+
+
+
+
 				visGeneral();
+
+
+				//Populate the income value menu 
+
+				var incNames = ["All Income", "<= 200% of Poverty", "<= 250% of Poverty", "<= 138% of Poverty", "<= 400% of Poverty", "138% to 400% of Poverty"];
+
+				//d3.selectAll("#invValName").remove();
+				var menu2 = d3.select("#income_metric");
+				// var parent=document.getElementBId("income_metric");
+				//menu2.remove();
+				// var child=document.getElementsByClassName("incValName");
+				menu2.selectAll(".incValName").remove(); 
+				// parent.removeChild(child);
+					
+					incomelist.forEach(function(d){
+					 	//console.log(d);
+
+					 	var incValid = visData[currentYear]["Alabama"][currentRace][d];
+					 	if (incValid != undefined){
+					 		console.log("incValid", incValid);
+					 		menu2.append("option").attr("value",d).classed("incValName", true).text(incNames[d]);
+					 	}
+						
+					}); 
 
 				// create the states in the SVG
 				var states = svg.selectAll("path")
@@ -344,8 +388,56 @@ border: 3px solid gray;
 		function drawLineCharts(){
 			currentMetric = "Race";
 				var data = lineData[currentState][currentMetric]; 
-				console.log(data);
+				console.log("line");
+				console.log(lineData);
 
+
+				//compute global max and min for PUI
+
+
+				for (var state in lineData){
+					//console.
+					var stateData = lineData[state];
+					var raceData = stateData["Race"];
+					var incData = stateData["Income"];
+
+					var raceMax = d3.max(raceData, function(d){
+
+				      		return d3.max(d["values"], function (e){
+				      				return +e.PUI;
+				      			});
+				      	});
+
+					console.log("Racemax", raceMax);
+
+
+					var incMax = d3.max(incData, function(d){
+
+				      		return d3.max(d["values"], function (e){
+				      				return +e.PUI;
+				      			});
+				      	});
+					console.log("INcmaxx", incMax);
+
+
+					var maxVal = d3.max([incMax, incData]);
+					//console.log("uuuuuuu" +d3.max([2,5]))
+					maxValue=d3.max([maxValue,maxVal]);
+					
+
+
+				}
+
+				     		 var xmax = d3.max(data, function(d){
+
+					      		return d3.max(d["values"], function (e){
+					      				return +e.year;
+					      			});
+					      	});
+
+
+
+				console.log("maxvla", maxValue);
 				var width = 500; 
 		      	var height =400; 
 		      	var margins = {top:60, bottom: 60, left: 60, right:60};
@@ -389,8 +481,7 @@ border: 3px solid gray;
 	     		 
 	     		console.log("Ymax: ", ymax, "Ymin: ", ymin);
 
-	     		var ymax = ymax+5;
-	     		var ymin = ymin-5;
+	     		var ymax = ymax+10;
 	      		var xScale = d3.scale.linear().range([0,chartWidth],.1).nice().domain([xmin,xmax]);
 	      		var yScale = d3.scale.linear().range([chartHeight, 0]).nice().domain([0, ymax]);
 	      		var lineColor = d3.scale.ordinal()
@@ -662,7 +753,10 @@ border: 3px solid gray;
 					lineData = createLineData(visData); //create object for drawing line charts
 						
 					allData = dataset;
+
 					mapData = inputMapData; 
+
+					console.log(visData);
 
 					var big={};
 					var o={};
@@ -684,6 +778,8 @@ border: 3px solid gray;
 						menu.append("option").attr("value",d).text(d);
 					}); 
 
+
+
 					drawVis(); 
 
 
@@ -691,12 +787,12 @@ border: 3px solid gray;
 						setYear(this.value);
 						});
 					d3.select("#races").on("change", function () {
-						console.log("change happened! :", this.value);
+						console.log("change happened! races :", this.value);
 
 						setRace(this.value);
 						});
-					d3.select("#income").on("change", function () {
-						console.log("change happened! :", this.value);
+					d3.select("#incomes").on("change", function () {
+						console.log("change happened! in incomes:", this.value);
 
 						setIncome(this.value);
 						});
