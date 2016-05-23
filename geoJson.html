@@ -23,7 +23,7 @@
 
 
 		.state{
-			fill:Black;
+			fill:red;
 		}
 
 		div.tooltip {	
@@ -433,13 +433,13 @@ border: 3px solid gray;
 	   			 var maplegend= d3.select("#maplegend");
 				 maplegend.selectAll("ul").remove(); 
 
-				 for (var i = 0; i < 8; i++){
+				 for (var i = 0; i < 9; i++){
 				 	var ul= maplegend.append("ul");
 
 			 		var li = ul.append("li");
 
 
-					li.append("span")
+					if (i<8) {	li.append("span")
 						.style("padding-left", "20px")
 						.style("margin-right", "10px")
 						.style("background-color", function(d){return color(i*7)});
@@ -449,6 +449,20 @@ border: 3px solid gray;
 						.text(function(d){return (i)*7 +"-"+ (i+1)*7 + "%"});
 
 
+
+					}
+					else{
+							li.append("span")
+						.style("padding-left", "20px")
+						.style("margin-right", "10px")
+						.style("background-color", "red");
+
+					li.append("span")
+						.append("text")
+						.text(function(d){return "Missing Data"});
+
+
+					}
 
 					 }
 
