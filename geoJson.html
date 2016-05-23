@@ -6,7 +6,7 @@
 		<title>
 			Using GeoJSON
 		</title>
-		  <link rel="stylesheet" href="d3.slider.css" />  
+		  <link rel="stylesheet" href="d3.slider.css" />
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
 		<script src="d3.slider.js"></script>
@@ -28,24 +28,24 @@
 			fill:red;
 		}
 
-		div.tooltip {	
-		    position: absolute;			
-		    text-align: center;			
-		    width: 80px;					
-		    height: 40px;					
-		    padding: 2px;				
-		    font: 12px sans-serif;		
-		    background: lightsteelblue;	
-		    border: 0px;		
-		    border-radius: 8px;			
-		    pointer-events: none;			
+		div.tooltip {
+		    position: absolute;
+		    text-align: center;
+		    width: 80px;
+		    height: 40px;
+		    padding: 2px;
+		    font: 12px sans-serif;
+		    background: lightsteelblue;
+		    border: 0px;
+		    border-radius: 8px;
+		    pointer-events: none;
 		}
 
-		/* Styling for the line charts 
-			Adapted from Mike Bostock 
+		/* Styling for the line charts
+			Adapted from Mike Bostock
 			http://bl.ocks.org/d3noob/8603837
 		*/
-		path { 
+		path {
 			stroke-width: 1;
 			fill: none;
 		}
@@ -72,7 +72,7 @@
 	     #linelegend{
 	    	position: absolute;
 	    	top:210px;
-	    	left: 1100px;
+	    	left: 950px;
 	    	height: 50px;
 
 	    }
@@ -88,7 +88,7 @@
 	     #maplegend{
 	    	position: absolute;
 	    	top:250px;
-	    	left: 820px;
+	    	left: 750px;
 	    	width: 150px;
 
 	    }
@@ -96,7 +96,7 @@
 	     #linediv{
 	    	position: absolute;
 	    	top:300px;
-	    	left: 1080px;
+	    	left: 930px;
 
 	    }
 	     #slider6{
@@ -112,8 +112,8 @@
 		#linetextDiv{
 
 			position: absolute;
-			left: 1100px;
-			top:170px;
+			left: 930px;
+			top:160px;
 		}
 
 
@@ -137,12 +137,12 @@
 				stroke: grey;
 				stroke-width: 1;
 				shape-rendering: crispEdges;
-			}	*/		
+			}	*/
 
 /*.body{
 height:auto;
 min-height: 100%;
-border: 3px solid gray;	
+border: 3px solid gray;
 }*/
 /*#wrapper .linelegend{
 	/*height:auto;*/
@@ -155,7 +155,7 @@ border: 3px solid gray;
 
 /*}*/
 /*#mapdiv {
- 
+
   width:800px;
   float:left;
 }*/
@@ -186,19 +186,19 @@ border: 3px solid gray;
 	<body>
 	<div id="description">
 		<h2> Exploring ObamaCare </h2>
-		<p> This visualization explores health insurance in the United States from 2006 to 2013. We use census data.  
+		<p> This visualization explores health insurance in the United States from 2006 to 2013. We use census data.
 		 <p>
 
 
 
-	<div> 
+	<div>
 
 		<!--  <div id="addPane"> -->
 
 <body>
-	<div id="selectmetric"> 
+	<div id="selectmetric">
 		<select id= "races">
-  
+
 		  <optgroup label="Race">
 		     <option value=0>All Races</option>
 		    <option value=1>White alone, not Hispanic</option>
@@ -222,7 +222,7 @@ border: 3px solid gray;
 		     <option value=3>Income <= 138% of Poverty Level</option>
 		      <option value=4>Income <= 400% of Poverty </option>
 		    <option value=5>Income between 138% to 400% of Poverty</option>
-		     
+
 
 		</optgroup>
 	</select>
@@ -233,10 +233,10 @@ border: 3px solid gray;
     <div id="maplegend"></div>
     <div id="linediv"></div>
 
-    <div id= "slider6"> 
+    <div id= "slider6">
 		  <h3> Current Year <span id="slider6text">2006</span></h3>
 	</div>
-    <div id= "linetextDiv"> 
+    <div id= "linetextDiv">
 		  <h2><span id="lineText"></span></h2>
 	</div>
 
@@ -247,13 +247,13 @@ border: 3px solid gray;
 
 		// create an SVG region in the usual way
 
-		/*TODO 	
-			* Clean up global variables 
-			* Remove print statements 
-			* Styling 
-			* Legends 
-			* Clean up directory - get rid of unnecessary files 
-			* Global min and global max 
+		/*TODO
+			* Clean up global variables
+			* Remove print statements
+			* Styling
+			* Legends
+			* Clean up directory - get rid of unnecessary files
+			* Global min and global max
 		*/
 
 
@@ -264,19 +264,19 @@ border: 3px solid gray;
 				.append("svg")
 				.attr({"width":width, "height":height});
 
-		var visData, drawData, lineData, mapData, currentYear, currentRace, currentIncome, currentState, currentMetric, allData, raceData, incomeData, maxValue, minValue; 
+		var visData, drawData, lineData, mapData, currentYear, currentRace, currentIncome, currentState, currentMetric, allData, raceData, incomeData, maxValue, minValue;
 
 		maxValue = 54.8; //Highest level of unisurecd
-		//minValue  = 100 // defaults for 
+		//minValue  = 100 // defaults for
 
 		var years=["2006","2007","2008","2009","2010","2011","2012","2013"];
 		var racelist=[0,1,2,3];
 		var incomelist = [0,1,2,3,4,5]
 
-		var statesNames = []; 
+		var statesNames = [];
 		// create a projection that provides our mapping from lat,lon data to x,y, coordiantes
 		var projection = d3.geo.albersUsa()
-				.scale(1100)
+				.scale(900)
 				.translate([width/2, height/2]);
 
 		// create a path tool that will translate GeoJSON into SVG path data
@@ -287,51 +287,51 @@ border: 3px solid gray;
 		.range(colorbrewer.YlGnBu[8]);
 
 		// Define the div for the tooltip
-		var div = d3.select("body").append("div")	
-		    .attr("class", "tooltip")				
+		var div = d3.select("body").append("div")
+		    .attr("class", "tooltip")
 		    .style("opacity", 0);
 
 
 
-		//set the new Year and redraw the Vis 
+		//set the new Year and redraw the Vis
 		function setYear(year){
 			console.log("setYear got called! Year: ", year);
 			currentYear = year;
-			drawVis(); 
+			drawVis();
 
-			//if selected income is valid for new year, update income list but retain income level for visualization 
+			//if selected income is valid for new year, update income list but retain income level for visualization
 
 
 			//incMenu();
 		}
 
-		//set the new Race and redraw the Vis 
+		//set the new Race and redraw the Vis
 		function setRace(race){
 			console.log("setRace got called! : ",race);
 			currentRace = race;
-			drawVis(); 
+			drawVis();
 		}
 
-		//set the new Income and redraw the Vis 
+		//set the new Income and redraw the Vis
 		function setIncome(income){
 			//console.log("setRace got called! : ",race);
 			currentIncome = income;
 			//incMenu();
-			drawVis(); 
+			drawVis();
 		}
 
 
 		if (currentYear === undefined){
-			currentYear = "2006"; 
+			currentYear = "2006";
 		}
-		//current race default 
+		//current race default
 		if (currentRace === undefined){
-			currentRace = 0; 
+			currentRace = 0;
 
-		//currentIncome default 
+		//currentIncome default
 		}if (currentIncome === undefined){
-			currentIncome = 0; 
-		}		
+			currentIncome = 0;
+		}
 
 
 		// function incMenu (){
@@ -344,9 +344,9 @@ border: 3px solid gray;
 		// 	// var parent=document.getElementBId("income_metric");
 		// 	//menu2.remove();
 		// 	// var child=document.getElementsByClassName("incValName");
-		// 	menu2.selectAll(".incValName").remove(); 
+		// 	menu2.selectAll(".incValName").remove();
 		// 	// parent.removeChild(child);
-				
+
 		// 		incomelist.forEach(function(d){
 		// 		 	//console.log(d);
 
@@ -355,22 +355,22 @@ border: 3px solid gray;
 		// 		 		console.log("incValid", incValid);
 		// 		 		menu2.append("option").attr("value",d).classed("incValName", true).text(incNames[d]);
 		// 		 	}
-					
-		// 		}); 
+
+		// 		});
 
 		// }
 
-		//execute once for the first year. 
+		//execute once for the first year.
 
 
 		//draw the Visualization
 
 
-		//sets up mapData for the general visualization with no categories 
+		//sets up mapData for the general visualization with no categories
 		function visGeneral(){
 				// build the popup menu
 
-				var censusData = getNewStateData(); 
+				var censusData = getNewStateData();
 				var censusMap = d3.map();
 				censusData.forEach(function(d){censusMap.set(d.NAME,d)});
 
@@ -380,53 +380,53 @@ border: 3px solid gray;
 					var name = mapData.features[i].properties.name;
 					mapData.features[i].properties.value = censusMap.get(name);
 				}
-			
-			
-		} 
+
+
+		}
 
 
 		function getNewStateData(){
 			var statesArray = [];
 			var yearData = visData[currentYear];
 			for (var state in yearData){
-				var stateStr = String(state); 
+				var stateStr = String(state);
 
 				var PUI = yearData[stateStr][currentRace][currentIncome];
 				var obj = {"NAME": stateStr, "PUI": PUI}
 				statesArray.push(obj);
 			}
-	
-			return statesArray; 
 
-		} 
+			return statesArray;
+
+		}
 
 
-		//draw the map 
+		//draw the map
 		function drawVis(){
 
-				//set the color domain 
-				drawData = allData; 
+				//set the color domain
+				drawData = allData;
 
-				colorObject = d3.values(drawData); 
+				colorObject = d3.values(drawData);
 
 				// var max = d3.max(colorObject, function(yearData) {
-		 	// 		 return d3.max(yearData["states"], function(d){ 
-		 	// 		 	return +d["PUI"]; 
+		 	// 		 return d3.max(yearData["states"], function(d){
+		 	// 		 	return +d["PUI"];
 		 	// 		 });
 				// });
 
 				// var min = d3.min(colorObject, function(yearData) {
-		 	// 		 return d3.min(yearData["states"], function(d){ 
-		 	// 		 	return +d["PUI"]; 
+		 	// 		 return d3.min(yearData["states"], function(d){
+		 	// 		 	return +d["PUI"];
 		 	// 		 });
 				// });
 
-				//var max 
+				//var max
 
 				color.domain([0, 55]);
 
 
-				// call the visualtion for non specific data 
+				// call the visualtion for non specific data
 
 
 
@@ -435,20 +435,20 @@ border: 3px solid gray;
 				visGeneral();
 
 
-				//Populate the income value menu 
+				//Populate the income value menu
 
 
 
 
 				// create the states in the SVG
 				var states = svg.selectAll("path")
-				.data(mapData.features); 
+				.data(mapData.features);
 
 				states.exit()
 					.transition()
 					.duration(10)
-					.remove(); 
-				
+					.remove();
+
 				states.enter()
 					.append("path")
 					.attr("d", path)
@@ -469,23 +469,23 @@ border: 3px solid gray;
 					}
 
 				})
-			  .on("mouseover", function(d) {		
-	            div.transition()		
-	                .duration(200)		
-	                .style("opacity", .9);		
+			  .on("mouseover", function(d) {
+	            div.transition()
+	                .duration(200)
+	                .style("opacity", .9);
 	            div	.html(currentYear + "<br/>"  + d.properties.value["NAME"] + "<br/>"  + d.properties.value["PUI"].substring(0,4) +" %" )	//d.properties.value["PUI"].substring(0,4)
-	                .style("left", (d3.event.pageX) + "px")		
-	                .style("top", (d3.event.pageY - 28) + "px");	
-	            })					
-		        .on("mouseout", function(d) {		
-		            div.transition()		
-		                .duration(500)		
-		                .style("opacity", 0);	
+	                .style("left", (d3.event.pageX) + "px")
+	                .style("top", (d3.event.pageY - 28) + "px");
+	            })
+		        .on("mouseout", function(d) {
+		            div.transition()
+		                .duration(500)
+		                .style("opacity", 0);
 		        })
 		        .on("click", function(d) {
-		        	var clicked_state = d.properties.value["NAME"]; 
+		        	var clicked_state = d.properties.value["NAME"];
 
-		        	var lineChartLabel = "Race Breakdown for: " + clicked_state; 
+		        	var lineChartLabel = "Race Breakdown for: " + clicked_state;
 
 		        	d3.select("#lineText").text(lineChartLabel);
 		        	console.log(clicked_state, "got clicked!");
@@ -495,10 +495,10 @@ border: 3px solid gray;
 		        );
 
 
-		        //create legend for map 
+		        //create legend for map
 
 	   			 var maplegend= d3.select("#maplegend");
-				 maplegend.selectAll("ul").remove(); 
+				 maplegend.selectAll("ul").remove();
 
 				 for (var i = 0; i < 9; i++){
 				 	var ul= maplegend.append("ul");
@@ -536,17 +536,17 @@ border: 3px solid gray;
 
 		}
 
-		/* Draws the line charts for the selected state 
+		/* Draws the line charts for the selected state
 
-			Adapted from Mike Bostock 
+			Adapted from Mike Bostock
 				http://bl.ocks.org/d3noob/8603837
 		*/
 
- 
+
 
 		function drawLineCharts(){
 			currentMetric = "Race";
-				var data = lineData[currentState][currentMetric]; 
+				var data = lineData[currentState][currentMetric];
 				console.log("line");
 				console.log(lineData);
 
@@ -582,7 +582,7 @@ border: 3px solid gray;
 					var maxVal = d3.max([incMax, incData]);
 					//console.log("uuuuuuu" +d3.max([2,5]))
 					maxValue=d3.max([maxValue,maxVal]);
-					
+
 
 
 				}
@@ -597,8 +597,8 @@ border: 3px solid gray;
 
 
 				console.log("maxvla", maxValue);
-				var width = 450; 
-		      	var height =380; 
+				var width = 450;
+		      	var height =380;
 		      	var margins = {top:60, bottom: 60, left: 60, right:60};
 		     	var chartWidth = width - margins.left - margins.right;
 		      	var chartHeight = height - margins.top - margins.bottom;
@@ -612,7 +612,7 @@ border: 3px solid gray;
 		      			);
 
 		      	});
-		      	
+
 
 	     		 var xmax = d3.max(data, function(d){
 
@@ -637,7 +637,7 @@ border: 3px solid gray;
 		      			);
 
 		      	});
-	     		 
+
 	     		console.log("Ymax: ", ymax, "Ymin: ", ymin);
 
 	     		var ymax = ymax+10;
@@ -661,7 +661,7 @@ border: 3px solid gray;
 					     //    .labelFormat(d3.format(".2f"))
 					     //    .scale(lineColor)
 					     //    .title("Income Level");
-				
+
 				// if (!clicked){
 
 						d3.select('body').selectAll('.linesvg').remove();
@@ -675,7 +675,7 @@ border: 3px solid gray;
 							      });
 
 						  svg.selectAll("g").remove();
-						
+
 					      var chart = svg.append("g")
 					      .attr("transform","translate("+margins.left + "," + margins.top + ")");
 
@@ -740,20 +740,20 @@ border: 3px solid gray;
 							.text(function(d){return raceNames[counter]});
 
 
-									 	
-									 	
+
+
 					        chart.append("path")
 
-					        .datum(d.values)	
+					        .datum(d.values)
 					        .attr("class", "line")
 					        .attr("d", line)
 					        .style("stroke", function(d, i){
-					        	// console.log("operat", counter);  
+					        	// console.log("operat", counter);
 					        	return lineColor(counter);
 
 
-					        }); 
-					        counter++; 
+					        });
+					        counter++;
 
 					        //function(d, i){  return lineColor(d.year)}); //function(d){return lineColor(d[0].year);}
 
@@ -782,10 +782,10 @@ border: 3px solid gray;
 			    		  });
 			}
 
-		
-	
 
-	
+
+
+
 
 		// gives us a data for a given year from the general data
 		var getyeardata=function ( dataobj, year){
@@ -798,8 +798,8 @@ border: 3px solid gray;
 		}
 
 			})
-		
-			
+
+
 		return yeardata;
 		};
 		var getstatedata=function(datarray, state){
@@ -810,7 +810,7 @@ border: 3px solid gray;
 					statedata.push(element)
 				}
 				})
-				
+
 			})
 			return statedata;
 		}
@@ -833,16 +833,16 @@ border: 3px solid gray;
 				}
 
 			 })
-			 
+
 		return value;
 		}
 
 
 
-		// Function that creates our main Object // visData. 
+		// Function that creates our main Object // visData.
 		function createObject(dataset){
 
-			var yearObj = {} 
+			var yearObj = {}
 			years.forEach(function(year){
 				var yearData = getyeardata(dataset, year);
 				var stateObj = {}
@@ -856,27 +856,27 @@ border: 3px solid gray;
 						var incomeObj = {}
 						incomelist.forEach(function(income){
 							var incomeRaceData = getincomedata(raceData, income);
-							incomeObj[income] = incomeRaceData; 
+							incomeObj[income] = incomeRaceData;
 
 						});
 
-						raceObj[race] = incomeObj; 
-					}); 
+						raceObj[race] = incomeObj;
+					});
 
-					stateObj[state] = raceObj; 
+					stateObj[state] = raceObj;
 
 				});
 
-				yearObj[year] = stateObj; 
+				yearObj[year] = stateObj;
 
-			}); 
-			return yearObj; 
-		}	
+			});
+			return yearObj;
+		}
 
 
 		function createLineData(myobj){
 			function parser (obj){
-				var newObj = {}; 
+				var newObj = {};
 				statesNames.forEach(function(state){
 
 					stateIncome = [];
@@ -884,43 +884,43 @@ border: 3px solid gray;
 					stateIncome["Race"] = [];
 
 					incomelist.forEach(function(income){
-						//loop throught the years 
+						//loop throught the years
 						var incValues = {};
 						var raceValues = {};
-						incValues["key"] = income; 
+						incValues["key"] = income;
 						incValues["values"] = [];
-						incValsArray = [] 
+						incValsArray = []
 						raceValues["values"] = []
 						years.forEach(function(yr){
 							var inc=obj[yr][state][0][income];
 
-							var incobj = {"year": yr, "PUI": inc}; 
-							incValues["values"].push(incobj); 
-							
-							if (income < 4){ //valid for getting race value 
+							var incobj = {"year": yr, "PUI": inc};
+							incValues["values"].push(incobj);
+
+							if (income < 4){ //valid for getting race value
 						        raceValues["key"] = income
-								var race = obj[yr][state][income][0] //get all races for 
+								var race = obj[yr][state][income][0] //get all races for
 								var raceobj = {"year": yr, "PUI": race};
 
-								raceValues["values"].push(raceobj); 
+								raceValues["values"].push(raceobj);
 							}
 
 						});
 						stateIncome["Income"].push(incValues);// = incValues;
 
 
-						if (income < 4){ //Adding races which go till 4 
-							stateIncome["Race"].push(raceValues); 
+						if (income < 4){ //Adding races which go till 4
+							stateIncome["Race"].push(raceValues);
 						}
-						
 
-					}); 
 
-				newObj[state] = stateIncome; 
+					});
+
+				newObj[state] = stateIncome;
 
 				});
 
-				return newObj; 
+				return newObj;
 
 			}
 
@@ -933,11 +933,11 @@ border: 3px solid gray;
 
 		// fetch our data -- first the map, and then the CSV data (the order matters little here since we
 		// are not displaying anything until the binding is done)
-		d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/us-states.json", 
+		d3.json("http://www.cs.middlebury.edu/~candrews/classes/infovis/data/us-states.json",
 			function(inputMapData){
 			d3.json("race_new_Data.json", function(race_Data){
-				raceData = race_Data; 
-			
+				raceData = race_Data;
+
 				d3.json("income_data.txt", function (dataset) {
 					//console.log()
 
@@ -947,22 +947,22 @@ border: 3px solid gray;
 						statesNames.push(array[i][0]);
 					}
 
-					visData = createObject(dataset); //create general object. 
+					visData = createObject(dataset); //create general object.
 					//console.log(visData);
 					lineData = createLineData(visData); //create object for drawing line charts
 						console.log(lineData);
 					allData = dataset;
 
-					mapData = inputMapData; 
+					mapData = inputMapData;
 
 					console.log(visData);
 
 					var big={};
 					var o={};
 					var racelist=[0,1,2,3];
-					
 
-				
+
+
 
 					years.forEach(function (yr) {
 						big [yr]=statesNames;
@@ -971,15 +971,15 @@ border: 3px solid gray;
 
 
 					var menu = d3.select("#metrics");
-					
+
 					years.forEach(function(d){
 					 	//console.log(d);
 						menu.append("option").attr("value",d).text(d);
-					}); 
+					});
 
 
-					//incMenu(); 
-					drawVis(); 
+					//incMenu();
+					drawVis();
 
 
 					d3.select("#years").on("change", function () {
@@ -1012,7 +1012,7 @@ border: 3px solid gray;
 
 		</script>
 
-		
+
 
 <div>
 
