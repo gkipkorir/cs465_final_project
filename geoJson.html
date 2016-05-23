@@ -201,6 +201,11 @@ border: 3px solid gray;
 			console.log("setYear got called! Year: ", year);
 			currentYear = year;
 			drawVis(); 
+
+			//if selected income is valid for new year, update income list but retain income level for visualization 
+
+
+			incMenu();
 		}
 
 		//set the new Race and redraw the Vis 
@@ -214,6 +219,7 @@ border: 3px solid gray;
 		function setIncome(income){
 			//console.log("setRace got called! : ",race);
 			currentIncome = income;
+			//incMenu();
 			drawVis(); 
 		}
 
@@ -231,7 +237,33 @@ border: 3px solid gray;
 		}		
 
 
+		function incMenu (){
 
+			var incNames = ["All Income", "<= 200% of Poverty", "<= 250% of Poverty", "<= 138% of Poverty", "<= 400% of Poverty", "138% to 400% of Poverty"];
+
+
+						//d3.selectAll("#invValName").remove();
+			var menu2 = d3.select("#income_metric");
+			// var parent=document.getElementBId("income_metric");
+			//menu2.remove();
+			// var child=document.getElementsByClassName("incValName");
+			menu2.selectAll(".incValName").remove(); 
+			// parent.removeChild(child);
+				
+				incomelist.forEach(function(d){
+				 	//console.log(d);
+
+				 	var incValid = visData[currentYear]["Alabama"][currentRace][d];
+				 	if (incValid != undefined){
+				 		console.log("incValid", incValid);
+				 		menu2.append("option").attr("value",d).classed("incValName", true).text(incNames[d]);
+				 	}
+					
+				}); 
+
+		}
+
+		//execute once for the first year. 
 
 
 		//draw the Visualization
@@ -308,26 +340,8 @@ border: 3px solid gray;
 
 				//Populate the income value menu 
 
-				var incNames = ["All Income", "<= 200% of Poverty", "<= 250% of Poverty", "<= 138% of Poverty", "<= 400% of Poverty", "138% to 400% of Poverty"];
 
-				//d3.selectAll("#invValName").remove();
-				var menu2 = d3.select("#income_metric");
-				// var parent=document.getElementBId("income_metric");
-				//menu2.remove();
-				// var child=document.getElementsByClassName("incValName");
-				menu2.selectAll(".incValName").remove(); 
-				// parent.removeChild(child);
-					
-					incomelist.forEach(function(d){
-					 	//console.log(d);
 
-					 	var incValid = visData[currentYear]["Alabama"][currentRace][d];
-					 	if (incValid != undefined){
-					 		console.log("incValid", incValid);
-					 		menu2.append("option").attr("value",d).classed("incValName", true).text(incNames[d]);
-					 	}
-						
-					}); 
 
 				// create the states in the SVG
 				var states = svg.selectAll("path")
@@ -482,7 +496,7 @@ border: 3px solid gray;
 	     		console.log("Ymax: ", ymax, "Ymin: ", ymin);
 
 	     		var ymax = ymax+10;
-	      		var xScale = d3.scale.linear().range([0,chartWidth],.1).nice().domain([xmin,xmax]);
+	      		var xScale = d3.scale.linear().range([0,chartWidth],.1).nice().domain([2006,2013]);
 	      		var yScale = d3.scale.linear().range([chartHeight, 0]).nice().domain([0, ymax]);
 	      		var lineColor = d3.scale.ordinal()
 						  .domain(1,5)
@@ -495,7 +509,10 @@ border: 3px solid gray;
 					    .y(function(d) { return yScale(+d.PUI); });
 
 
-
+				      // var legend = d3.legend.color()
+					     //    .labelFormat(d3.format(".2f"))
+					     //    .scale(lineColor)
+					     //    .title("Income Level");
 				
 				// if (!clicked){
 
@@ -517,7 +534,8 @@ border: 3px solid gray;
 
 					      var xAxis = d3.svg.axis()
 					      .scale(xScale)
-					      .orient("bottom");
+					      .orient("bottom")
+					      .tickFormat(d3.format("d"));
 
 
 					      chart.append("g")
@@ -569,15 +587,23 @@ border: 3px solid gray;
 					        //var ln=chart.selectAll(".line");
 
 					      	//chart.exit().remove();
-					        chart.selectAll('circle')
-						      .data(d.values, function(e,i){ return e[i]})
-						      .enter()
-						      .append('circle')
-						      .attr({
-							        cx:function(d){console.log("d.year in cx", +d.year); return xScale(+d.year);},
-							        cy:function(d){return yScale(+d.PUI);},
-							        r:function(d){return 2;}
-							      });
+
+					      // chart.append("g")
+					      // 	.datum(d.values)
+					      //   .attr("transform", "translate("+(30)+","+(50)+")")
+					      //   .attr("class","legend")
+					      //   .call(legend);
+
+
+					       //  chart.selectAll('circle')
+						      // .datum(d.values, function(e,i){ return e[i]})
+						      // .enter()
+						      // .append('circle')
+						      // .attr({
+							     //    cx:function(d){console.log("d.year in cx", +d.year); return xScale(+d.year);},
+							     //    cy:function(d){return yScale(+d.PUI);},
+							     //    r:function(d){return 2;}
+							     //  });
 
 
 			    		  });
@@ -779,7 +805,7 @@ border: 3px solid gray;
 					}); 
 
 
-
+					incMenu(); 
 					drawVis(); 
 
 
@@ -795,6 +821,7 @@ border: 3px solid gray;
 						console.log("change happened! in incomes:", this.value);
 
 						setIncome(this.value);
+
 						});
 
 
