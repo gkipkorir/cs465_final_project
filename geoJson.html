@@ -43,26 +43,32 @@
 			fill: none;
 		}
 		.linesvg{
-			border: 1px solid grey;
+			/*border: 1px solid grey;*/
 			margin-bottom: 100px;
     		margin-right: 150px;
     		margin-top: 100px;
 		}
-	/*	 .axis {
+		 .axis {
       fill:none;
       stroke:gray;
       stroke-opacity:0.3;
-    }*/
+    }
+    .axis text{
+    	font-family: sans-serif;
+    }
+    .axis .tick{
+    	opacity: 0;
+    }
 
 
-/*			.axis path,
+		/*	.axis path,
 			.axis line {
 				fill: none;
 				stroke: grey;
 				stroke-width: 1;
 				shape-rendering: crispEdges;
-			}			
-*/
+			}	*/		
+
 /*.body{
 height:auto;
 min-height: 100%;
@@ -545,17 +551,17 @@ border: 3px solid gray;
 						      .append("text")
 						      .attr({
 						        "x":chartWidth/2,
-						        "y":margins.bottom/2,
+						        "y":margins.bottom/1.4,
 						              "text-anchor":"middle" // set so the (x,y) of the text is in the middle bottom
 						            })
 						      .text("year");
 
 						var yAxis = d3.svg.axis()
 						      .scale(yScale)
-						      .orient("left")
-						      .innerTickSize(-chartWidth)
-						      .outerTickSize(0)
-						      .tickPadding(10);
+						      .orient("left");
+						      // .innerTickSize(-chartWidth)
+						      // .outerTickSize(0)
+						      // .tickPadding(10);
 
 						      chart.append("g")
 						      .attr("class","axis")
@@ -563,11 +569,11 @@ border: 3px solid gray;
 						      .append("text")
 						      .attr({
 						        "x":-chartHeight/2,
-						        "y":3 * -margins.left/4,
+						        "y":3 * -margins.left/5,
 						        "text-anchor":"middle",
 						        "transform" : "rotate(-90)"
 						      })
-						      .text("PUI");
+						      .text("Percent of people without insurance");
 
 						 var counter = 0;
 						 data.forEach(function(d){
