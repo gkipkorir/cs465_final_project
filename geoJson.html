@@ -47,25 +47,69 @@
 			stroke-width: 1;
 			fill: none;
 		}
-		.linesvg{
-			/*border: 1px solid grey;*/
+
+		 .axis {
+	      fill:none;
+	      stroke:Black;
+	      /*stroke-opacity:0.3;*/
+	    }
+	    .axis text{
+	    	font-family: sans-serif;
+	    }
+	    .axis .tick{
+	    	opacity: 0;
+	    }
+	    #selectmetric{
+	    	position: relative;
+	    	top:50px;
+	    	left: 50px;
+	    	right: 1000px;
+
+	    }
+	     #linelegend{
+	    	position: relative;
+	    	top:60px;
+	    	left: 800px;
+
+	    }
+
+	     #mapdiv{
+	    	position: relative;
+	    	top:50px;
+	    	left: 50px;
+
+	    }
+
+	     #maplegend{
+	    	position: relative;
+	    	top:100px;
+	    	left: 600px;
+
+	    }
+
+	     #linediv{
+	    	position: relative;
+	    	top:100px;
+	    	left: 800px;
+
+	    }
+	     #slider6{
+	    	position: relative;
+	    	top:10px;
+	    	left: 100px;
+
+	    }
+
+
+
+
+/*		.linesvg{
+			border: 1px solid grey;
 			margin-bottom: 100px;
     		margin-right: 150px;
     		margin-top: 100px;
 		}
-		 .axis {
-      fill:none;
-      stroke:Black;
-      /*stroke-opacity:0.3;*/
-    }
-    .axis text{
-    	font-family: sans-serif;
-    }
-    .axis .tick{
-    	opacity: 0;
-    }
-
-
+*/
 		/*	.axis path,
 			.axis line {
 				fill: none;
@@ -79,7 +123,7 @@ height:auto;
 min-height: 100%;
 border: 3px solid gray;	
 }*/
-#wrapper .linelegend{
+/*#wrapper .linelegend{
 	/*height:auto;*/
 	/*min-height: 100%;*/
   /*width:100px;*/
@@ -88,13 +132,13 @@ border: 3px solid gray;
   /*background-color: red;*/
 
 
-}
-#mapdiv {
+/*}*/
+/*#mapdiv {
  
-  /*width:800px;*/
+  width:800px;
   float:left;
-}
-#linediv {
+}*/
+/*#linediv {
 
   width:32%;
   float:left;
@@ -104,19 +148,19 @@ border: 3px solid gray;
 	position: relative;
 	background-color: red;
 	top:  800px;
-	/*border: 3px solid gray;
-	border-width: 5px;*/
+	border: 3px solid gray;
+	border-width: 5px;
 
 
-}
+}*/
 
-#slider6{
+/*#slider6{
 	clear: both;
 	top: 30px;
 	left: 150px;
 
 }
-		</style>
+*/		</style>
 	</head>
 	<body>
 		<h1> Exploring ObamaCare </h1>
@@ -154,27 +198,15 @@ border: 3px solid gray;
 		</optgroup>
 	</select>
 	</div>
-	<!-- <div id="linelegend"> </div> -->
-<div id="wrapper">
-    <div id="mapdiv"></div>
+
     <div id="linelegend"> </div>
+    <div id="mapdiv"></div>
+    <div id="maplegend"> here I am</div>
     <div id="linediv"></div>
-	<div id= "slider6"> 
+
+    <div id= "slider6"> 
 		  <h2> Current Years <span id="slider6text">2006</span></h2>
 	</div>
-	<div id="maplegend"> here I am</div>
-    
-  </div>
-
-<!-- </div> -->
-<!--  	<div id= "slider6"> 
- 		  <h2> Current Years <span id="slider6text">2006</span></h2>
- 	</div> -->
-    
-  
-    
-    <!-- <div id="slider6"></div> -->
-
 
 
 
@@ -194,7 +226,7 @@ border: 3px solid gray;
 		*/
 
 
-		var width = 800, height = 500;
+		var width = 600, height = 400;
 
 
 		var svg = d3.selectAll("#mapdiv")
@@ -213,7 +245,7 @@ border: 3px solid gray;
 		var statesNames = []; 
 		// create a projection that provides our mapping from lat,lon data to x,y, coordiantes
 		var projection = d3.geo.albersUsa()
-				.scale(1000)
+				.scale(800)
 				.translate([width/2, height/2]);
 
 		// create a path tool that will translate GeoJSON into SVG path data
