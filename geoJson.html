@@ -50,8 +50,8 @@
 		}
 		 .axis {
       fill:none;
-      stroke:gray;
-      stroke-opacity:0.3;
+      stroke:Black;
+      /*stroke-opacity:0.3;*/
     }
     .axis text{
     	font-family: sans-serif;
@@ -74,12 +74,14 @@ height:auto;
 min-height: 100%;
 border: 3px solid gray;	
 }*/
-#wrapper {
+#wrapper .linelegend{
 	/*height:auto;*/
 	/*min-height: 100%;*/
-  width:100%;
+  /*width:100px;*/
   /*clear:both;*/
   /*border: 3px solid grey;*/
+  /*background-color: red;*/
+
 
 }
 #mapdiv {
@@ -91,6 +93,16 @@ border: 3px solid gray;
 
   width:32%;
   float:left;
+}
+.linelegend{
+
+	position: relative;
+	background-color: red;
+	top:  800px;
+	/*border: 3px solid gray;
+	border-width: 5px;*/
+
+
 }
 
 #slider6{
@@ -128,6 +140,7 @@ border: 3px solid gray;
 		<optgroup label="Income Levels" id="income_metric"></optgroup>
 	</select>
 	</div>
+	<!-- <div id="linelegend"> </div> -->
 <div id="wrapper">
     <div id="mapdiv"></div>
     <div id="linelegend"> </div>
@@ -394,6 +407,31 @@ border: 3px solid gray;
 		        	drawLineCharts();
 		        }
 		        );
+
+
+		        //create legend for map 
+
+	   			 var maplegend= d3.select("#maplegend");
+				 maplegend.selectAll("ul").remove(); 
+
+				 for (var i = 0; i < 8; i++){
+				 	var ul= maplegend.append("ul");
+
+			 		var li = ul.append("li");
+
+
+					li.append("span")
+						.style("padding-left", "20px")
+						.style("margin-right", "10px")
+						.style("background-color", function(d){return color(i*7)});
+
+					li.append("span")
+						.append("text")
+						.text(function(d){return (i)*7 +"-"+ (i+1)*7 + "%"});
+
+
+
+					 }
 
 
 		}
