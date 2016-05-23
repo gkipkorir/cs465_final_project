@@ -129,17 +129,20 @@ border: 3px solid gray;
 	</select>
 	</div>
 <div id="wrapper">
-  <div id="mapdiv">
- 
-
+    <div id="mapdiv"></div>
+    <div id="linelegend"> </div>
+    <div id="linediv"></div>
+	<div id= "slider6"> 
+		  <h2> Current Years <span id="slider6text">2006</span></h2>
 	</div>
-
+	<div id="maplegend"> here I am</div>
+    
   </div>
-  <div id="linediv"></div>
+
 <!-- </div> -->
- 	<div id= "slider6"> 
+<!--  	<div id= "slider6"> 
  		  <h2> Current Years <span id="slider6text">2006</span></h2>
- 	</div>
+ 	</div> -->
     
   
     
@@ -147,9 +150,7 @@ border: 3px solid gray;
 
 
 
- 
 
-  </div>
 
 		<script type="text/javascript">
 
@@ -505,8 +506,11 @@ border: 3px solid gray;
 	      		var xScale = d3.scale.linear().range([0,chartWidth],.1).nice().domain([2006,2013]);
 	      		var yScale = d3.scale.linear().range([chartHeight, 0]).nice().domain([0, ymax]);
 	      		var lineColor = d3.scale.ordinal()
-						  .domain(1,5)
-						  .range([ "rgb(153, 107, 195)", "rgb(56, 106, 197)", "rgb(93, 199, 76)", "rgb(223, 199, 31)", "rgb(234, 118, 47)"]);
+						  .domain(1,4)
+						  .range([ "rgb(56, 106, 197)", "rgb(93, 199, 76)", "rgb(223, 199, 31)", "rgb(234, 118, 47)"]);
+
+
+				var raceNames = ["All races", "White, not Hispanic", "Black, not Hispanic", "Hispanic (any race)"];
 
 
 				 var line = d3.svg.line()
@@ -576,9 +580,28 @@ border: 3px solid gray;
 						      .text("Percent of people without insurance");
 
 						 var counter = 0;
+						 var racelinelegend= d3.select("#linediv");
+						 racelinelegend.selectAll("ul").remove();
 						 data.forEach(function(d){
+						 	//console.log( d);
 						 	//console.log("d.values" , d.values);
-						 	counter++; 
+						 	var ul= racelinelegend.append("ul");
+
+					 		var li = ul.append("li");
+
+
+						li.append("span")
+							.style("padding-left", "20px")
+							.style("margin-right", "10px")
+							.style("background-color", function(d){return lineColor(counter)});
+
+						li.append("span")
+							.append("text")
+							.text(function(d){return raceNames[counter]});
+
+
+									 	
+									 	
 					        chart.append("path")
 
 					        .datum(d.values)	
@@ -588,7 +611,11 @@ border: 3px solid gray;
 					        	// console.log("operat", counter);  
 					        	return lineColor(counter);
 
-					        }); //function(d, i){  return lineColor(d.year)}); //function(d){return lineColor(d[0].year);}
+
+					        }); 
+					        counter++; 
+
+					        //function(d, i){  return lineColor(d.year)}); //function(d){return lineColor(d[0].year);}
 
 					        //var ln=chart.selectAll(".line");
 
@@ -783,7 +810,7 @@ border: 3px solid gray;
 					visData = createObject(dataset); //create general object. 
 					//console.log(visData);
 					lineData = createLineData(visData); //create object for drawing line charts
-						
+						console.log(lineData);
 					allData = dataset;
 
 					mapData = inputMapData; 
