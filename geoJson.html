@@ -13,7 +13,9 @@
 
 		<style type="text/css">
 
-
+		.body{
+			font-family: sans-serif;
+		}
 
 		.brush .extent {
   		stroke: #000;
@@ -60,49 +62,68 @@
 	    	opacity: 0;
 	    }
 	    #selectmetric{
-	    	position: relative;
-	    	top:50px;
-	    	left: 50px;
-	    	right: 1000px;
+	    	position: absolute;
+	    	top:130px;
+	    	left: 100px;
+
+	    	/*right: 1000px;*/
 
 	    }
 	     #linelegend{
-	    	position: relative;
-	    	top:60px;
-	    	left: 800px;
+	    	position: absolute;
+	    	top:210px;
+	    	left: 1100px;
+	    	height: 50px;
 
 	    }
 
 	     #mapdiv{
-	    	position: relative;
-	    	top:50px;
+	    	position: absolute;
+	    	top:150px;
 	    	left: 50px;
+	    	width: 650px;
 
 	    }
 
 	     #maplegend{
-	    	position: relative;
-	    	top:100px;
-	    	left: 600px;
+	    	position: absolute;
+	    	top:250px;
+	    	left: 820px;
+	    	width: 150px;
 
 	    }
 
 	     #linediv{
-	    	position: relative;
-	    	top:100px;
-	    	left: 800px;
+	    	position: absolute;
+	    	top:300px;
+	    	left: 1080px;
 
 	    }
 	     #slider6{
-	    	position: relative;
-	    	top:10px;
-	    	left: 100px;
+	    	position: absolute;
+	    	top:750px;
+	    	left: 130px;
 
 	    }
+	    ul
+		{
+		    list-style-type: none;
+		}
+		#linetextDiv{
+
+			position: absolute;
+			left: 1100px;
+			top:170px;
+		}
 
 
+/*		.path{
+			border: 1px solid grey;
+			stroke: grey;
+			stroke-width: 1;
 
 
+		}*/
 /*		.linesvg{
 			border: 1px solid grey;
 			margin-bottom: 100px;
@@ -163,7 +184,15 @@ border: 3px solid gray;
 */		</style>
 	</head>
 	<body>
-		<h1> Exploring ObamaCare </h1>
+	<div id="description">
+		<h2> Exploring ObamaCare </h2>
+		<p> This visualization explores health insurance in the United States from 2006 to 2013. We use census data.  
+		 <p>
+
+
+
+	<div> 
+
 		<!--  <div id="addPane"> -->
 
 <body>
@@ -201,13 +230,15 @@ border: 3px solid gray;
 
     <div id="linelegend"> </div>
     <div id="mapdiv"></div>
-    <div id="maplegend"> here I am</div>
+    <div id="maplegend"></div>
     <div id="linediv"></div>
 
     <div id= "slider6"> 
-		  <h2> Current Years <span id="slider6text">2006</span></h2>
+		  <h3> Current Year <span id="slider6text">2006</span></h3>
 	</div>
-
+    <div id= "linetextDiv"> 
+		  <h2><span id="lineText"></span></h2>
+	</div>
 
 
 
@@ -226,7 +257,7 @@ border: 3px solid gray;
 		*/
 
 
-		var width = 600, height = 400;
+		var width = 800, height = 600;
 
 
 		var svg = d3.selectAll("#mapdiv")
@@ -245,7 +276,7 @@ border: 3px solid gray;
 		var statesNames = []; 
 		// create a projection that provides our mapping from lat,lon data to x,y, coordiantes
 		var projection = d3.geo.albersUsa()
-				.scale(800)
+				.scale(1100)
 				.translate([width/2, height/2]);
 
 		// create a path tool that will translate GeoJSON into SVG path data
@@ -453,6 +484,10 @@ border: 3px solid gray;
 		        })
 		        .on("click", function(d) {
 		        	var clicked_state = d.properties.value["NAME"]; 
+
+		        	var lineChartLabel = "Race Breakdown for: " + clicked_state; 
+
+		        	d3.select("#lineText").text(lineChartLabel);
 		        	console.log(clicked_state, "got clicked!");
 		        	currentState = clicked_state;
 		        	drawLineCharts();
@@ -491,7 +526,7 @@ border: 3px solid gray;
 
 					li.append("span")
 						.append("text")
-						.text(function(d){return "Missing Data"});
+						.text(function(d){return "Data Unavailable"});
 
 
 					}
@@ -562,8 +597,8 @@ border: 3px solid gray;
 
 
 				console.log("maxvla", maxValue);
-				var width = 500; 
-		      	var height =400; 
+				var width = 450; 
+		      	var height =380; 
 		      	var margins = {top:60, bottom: 60, left: 60, right:60};
 		     	var chartWidth = width - margins.left - margins.right;
 		      	var chartHeight = height - margins.top - margins.bottom;
@@ -683,7 +718,9 @@ border: 3px solid gray;
 						      .text("Percent of people without insurance");
 
 						 var counter = 0;
-						 var racelinelegend= d3.select("#linediv");
+						 var racelinelegend= d3.select("#linelegend");
+						 // var ul = racelinelegend.select("#linelegend");
+
 						 racelinelegend.selectAll("ul").remove();
 						 data.forEach(function(d){
 						 	//console.log( d);
